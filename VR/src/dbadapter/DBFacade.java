@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 //import java.util.Date;
@@ -57,7 +58,63 @@ public class DBFacade implements IHolidayOffer {
 	}
 
 	
-
+	public void creatingAppointment(int creator, Date[] dates, int[] participants, String description, String name,
+			String location, int duration, Date deadline, int groupId) {
+		// TODO Auto-generated method stub
+		System.out.println(creator);
+		
+		
+		String insertAppointment = "INSERT INTO appointments (groupId, description, name, location, duration, deadline, isFinal)VALUES (?, ?, ?, ?, ?, ?, false)";
+		
+		String insertPossibleDate = "INSERT INTO possibleDates (date, aid, mid) VALUES (?, ?, ?)";
+		String insertParticipant = "INSERT INTO participants (mid, aid) VALUES (?, ?)";
+		
+		try (Connection connection = DriverManager
+				.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+			try (PreparedStatement psInsertApt = connection.prepareStatement(insertAppointment, Statement.RETURN_GENERATED_KEYS);
+					PreparedStatement psInsertPD = connection.prepareStatement(insertPossibleDate);
+					PreparedStatement psInsertPar = connection.prepareStatement(insertParticipant)){
+				psInsertApt.setInt(1, groupId);
+				psInsertApt.setString(2, description);
+				psInsertApt.setString(3, name);
+				psInsertApt.setString(4, location);
+				psInsertApt.setInt(5, duration);
+				psInsertApt.setDate(6, deadline);
+				psInsertApt.executeUpdate();
+//				psDelete.executeUpdate();
+				try (ResultSet generatedKeys = psInsertApt.getGeneratedKeys()){
+					if(generatedKeys.next()) {
+						int aid = Math.toIntExact(generatedKeys.getLong(1));
+//						System.out.println(generatedKeys.getLong(1));
+						
+						for (Date d : dates) {
+							psInsertPD.setDate(1, d);
+							psInsertPD.setInt(2, aid);
+							psInsertPD.setInt(3, creator);
+							psInsertPD.executeUpdate();
+						}
+						
+						for (int mid : participants) {
+							psInsertPar.setInt(1, mid);
+							psInsertPar.setInt(2, aid);
+							psInsertPar.executeUpdate();
+						}
+						//und noch einmal für den creator
+						psInsertPar.setInt(1, creator);
+						psInsertPar.setInt(2, aid);
+						psInsertPar.executeUpdate();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	/**
 	 * Die finalizingAppointment methode halt!!
 	 */
@@ -391,4 +448,6 @@ public class DBFacade implements IHolidayOffer {
 
 		return dayDifference * fee;
 	}
+
+	
 }
