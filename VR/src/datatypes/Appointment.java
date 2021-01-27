@@ -61,7 +61,8 @@ public class Appointment {
 		}
 	}
 	
-	public Appointment(int aid, int groupId, String description, String name, String location, int duration, Date deadline, Boolean isFinal, ArrayList<PossibleDate> possibleDates) {
+	public Appointment(int aid, int groupId, String description, String name, String location, int duration,
+			Date deadline, Boolean isFinal, ArrayList<PossibleDate> possibleDates) {
 		this.aid = aid;
 		this.groupId = groupId;
 		this.description = description;
