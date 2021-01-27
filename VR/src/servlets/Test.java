@@ -67,14 +67,14 @@ public class Test extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		
 		if (request.getParameter("action").equals("addAppointment")) {
-			System.out.println("Registered Post request with action=addAppointment");
+//			System.out.println("Registered Post request with action=addAppointment");
 			
 			if(request.getParameter("participants")==null || 
 					request.getParameter("description")==null ||
 					request.getParameter("name")==null ||
 					request.getParameter("location")==null ||
 					request.getParameter("duration")==null ||
-					request.getParameter("dates")==null ||
+					request.getParameter("date1")==null ||
 					request.getParameter("numOfDates")==null) {
 				//todo: forward to errorpage
 				System.out.println("Anfrage falsch");
@@ -85,7 +85,7 @@ public class Test extends HttpServlet {
 				int numOfDates = Integer.parseInt(request.getParameter("numOfDates"));
 				Date[] dates = new Date[numOfDates];
 				for(int i=0;i<numOfDates;i++){
-					dates[i]= Date.valueOf((String) request.getParameter("date"+i));
+					dates[i]= Date.valueOf((String) request.getParameter("date"+(i + 1)));
 				}
 				
 				int creator = 69;
@@ -96,7 +96,7 @@ public class Test extends HttpServlet {
 				String name = (String)request.getParameter("name");
 				String location = (String) request.getParameter("location");
 				int duration = Integer.parseInt(request.getParameter("duration"));
-				Date deadline = Date.valueOf((String) request.getParameter("dates"));
+				Date deadline = Date.valueOf((String) request.getParameter("deadline"));
 				
 				System.out.println(dates);
 				System.out.println(duration);

@@ -45,7 +45,7 @@
 		</tr>
 		<tr>
 			<td>Deadline</td>
-			<td><input type="date" name="description"></td>
+			<td><input type="date" name="deadline"></td>
 		</tr>
 		</table>
 		
