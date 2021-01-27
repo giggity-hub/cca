@@ -66,8 +66,8 @@ public class DBFacade implements IHolidayOffer {
 		String selectPossibleDates = "SELECT * FROM possibleDates WHERE aid=?";
 		String setFinal = "UPDATE appointments SET isFinal = true WHERE aid=?";
 
-		String deletePossibleDates = "DELETE FROM possibledates WHERE aid =? AND date !=?";
-		String deleteParticipants = "DELETE FROM participants WHERE aid=? AND mid NOT IN (SELECT mid FROM possibledates WHERE aid=? AND date=?)";
+		String deletePossibleDates = "DELETE FROM possibleDates WHERE aid =? AND date !=?";
+		String deleteParticipants = "DELETE FROM participants WHERE aid=? AND mid NOT IN (SELECT mid FROM possibleDates WHERE aid=? AND date=?)";
 		// Update Database.
 		try (Connection connection = DriverManager
 				.getConnection(
