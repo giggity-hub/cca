@@ -1,0 +1,15 @@
+package dbadapter;
+
+import java.sql.Timestamp;
+
+public class PossibleDate {
+	Timestamp date;
+	int mid;
+	int aid;
+	
+	public PossibleDate(Timestamp date, int mid, int aid) {
+		this.date = date;
+		this.mid = mid;
+		this.aid = aid;
+	}
+}

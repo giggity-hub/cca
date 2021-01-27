@@ -1,0 +1,61 @@
+package dbadapter;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class DBFacade2 {
+	private static DBFacade instance;
+
+	/**
+	 * Constructor which loads the corresponding driver for the chosen database type
+	 */
+	private DBFacade() {
+		try {
+			Class.forName("com." + Configuration.getType() + ".jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Implementation of the Singleton pattern.
+	 * 
+	 * @return
+	 */
+	public static DBFacade getInstance() {
+		if (instance == null) {
+			instance = new DBFacade();
+		}
+
+		return instance;
+	}
+
+	public static void setInstance(DBFacade dbfacade) {
+		instance = dbfacade;
+	}
+	
+	
+	/**
+	 * 
+	 * 
+	 */
+	public void setAvailableHolidayOffer() {
+
+		// Declare necessary SQL statement.
+		String deleteBO = "DELETE FROM Booking WHERE (paid=false) AND \"creationDate + 14 days < date\"";
+
+		// Update Database.
+		try (Connection connection = DriverManager
+				.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+			try (PreparedStatement psDelete = connection.prepareStatement(deleteBO)) {
+				psDelete.executeUpdate();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

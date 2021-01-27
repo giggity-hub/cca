@@ -1,0 +1,55 @@
+package dbadapter;
+
+import java.sql.Date;
+import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Appointment {
+	int aid;
+	int groupId;
+	String description;
+	String name;
+	String location;
+	int duration;
+	Date deadline;
+	Boolean finalized;
+	ArrayList<PossibleDate> possibleDates;
+	
+	public Appointment(int aid, int groupId, String description, String name, String location, int duration, 
+			Date deadline, Boolean finalized) {
+		this.aid = aid;
+		this.groupId = groupId;
+		this.description = description;
+		this.name = name;
+		this.location = location;
+		this.duration = duration;
+		this.deadline = deadline;
+		this.finalized = finalized;
+	}
+	
+	public void setPossibleDates(ArrayList<PossibleDate> pds) {
+		this.possibleDates = pds;
+	}
+	
+	
+	public Date finalize() {
+		Map<Date, Integer> map = new HashMap<Date, Integer>();
+//		i better hope this shit dont receives an empty array
+		Date finalDate = this.possibleDates.get(0).date;
+		
+		for (PossibleDate pd: this.possibleDates) {
+			Integer count = map.get(pd.date);
+			
+			if (count == null) {
+				map.put(pd.date, 1);
+			}else {
+				map.put(pd.date, count+1);
+			}
+			
+		}
+		return finalDate;
+		
+	}
+}

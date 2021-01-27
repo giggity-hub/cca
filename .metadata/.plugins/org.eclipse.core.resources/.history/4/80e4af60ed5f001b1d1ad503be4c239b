@@ -1,0 +1,14 @@
+package dbadapter;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
+public class Appointment {
+	private int aid;
+	private int groupId;
+	private String description;
+	private String name;
+	private String location;
+	private int duration;
+	private Timestamp deadline
+}

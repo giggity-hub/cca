@@ -1,0 +1,29 @@
+package dbadapter;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
+
+public class Appointment {
+	private int aid;
+	private int groupId;
+	private String description;
+	private String name;
+	private String location;
+	private int duration;
+	private Timestamp deadline;
+	private Boolean finalized;
+	private ArrayList<PossibleDate> possibleDates;
+	
+	public Appointment(int aid, int groupId, String description, String name, String location, int duration, 
+			Timestamp deadline, Boolean finalized) {
+		this.aid = aid;
+		this.groupId = groupId;
+		this.description = description;
+		this.name = name;
+		this.location = location;
+		this.duration = duration;
+		this.deadline = deadline;
+		this.finalized = finalized;
+	}
+}

@@ -1,0 +1,37 @@
+package dbadapter;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class DBFacade2 {
+	private static DBFacade22 instance;
+
+	/**
+	 * Constructor which loads the corresponding driver for the chosen database type
+	 */
+	private DBFacade2() {
+		try {
+			Class.forName("com." + Configuration.getType() + ".jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Implementation of the Singleton pattern.
+	 * 
+	 * @return
+	 */
+	public static DBFacade22 getInstance() {
+		if (instance == null) {
+			instance = new DBFacade22();
+		}
+
+		return instance;
+	}
+
+	public static void setInstance(DBFacade22 dbfacade) {
+		instance = dbfacade;
+	}
+}

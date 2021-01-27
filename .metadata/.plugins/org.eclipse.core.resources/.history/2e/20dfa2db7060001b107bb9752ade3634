@@ -1,0 +1,15 @@
+package dbadapter;
+
+import java.sql.Date;
+
+public class PossibleDate {
+	Date date;
+	int mid;
+	int aid;
+	
+	public PossibleDate(Date date, int mid, int aid) {
+		this.date = date;
+		this.mid = mid;
+		this.aid = aid;
+	}
+}

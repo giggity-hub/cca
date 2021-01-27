@@ -1,0 +1,7 @@
+<#include "header.ftl">
+
+<b>Welcome to our little demonstration on the VR Webapp</b><br><br>
+
+<h1>You're mom gay</h1>
+
+<#include "footer.ftl">

@@ -1,0 +1,28 @@
+package application;
+
+import dbadapter.DBFacade;
+
+public class CCAAplication {
+	
+	private static VRApplication instance;
+
+	/**
+	 * Implementation of the Singleton pattern.
+	 * 
+	 * @return
+	 */
+	public static VRApplication getInstance() {
+		if (instance == null) {
+			instance = new VRApplication();
+		}
+
+		return instance;
+	}
+	
+	
+	public void checkDeadlines() {
+		DBFacade.getInstance().finalizingAppointment();
+	}
+	
+	
+}
