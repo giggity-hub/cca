@@ -10,15 +10,15 @@
 		dates
 		<input type="date" name="dates">
 		participants
-		<input type="text" name="participants"/>
+		<input type="text" name="participants" placeholder="1,2,3" />
 		description
-		<input type="text" name="description">
+		<input type="text" name="description" placeholder="description">
 		name
-		<input type="text" name="name">
+		<input type="text" name="name" placeholder="max mustermann">
 		location
-		<input type="text" name="location">
+		<input type="text" name="location" placeholder="Bundestag">
 		duration (in milliseconds)
-		<input type="text" name="duration">
+		<input type="text" name="duration" placeholder="50">
 		deadline
 		<input type="date" name="description">
 		
