@@ -1,4 +1,4 @@
-package dbadapter;
+package datatypes;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Appointment {
-	int aid;
+	public int aid;
 	int groupId;
 	String description;
 	String name;
 	String location;
 	int duration;
 	Date deadline;
-	Boolean isFinal;
-	ArrayList<PossibleDate> possibleDates;
+	public Boolean isFinal;
+	public ArrayList<PossibleDate> possibleDates;
 	
 	public Appointment(int aid, int groupId, String description, String name, String location, int duration, 
 			Date deadline, Boolean finalized) {

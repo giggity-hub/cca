@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 import datatypes.AddressData;
+import datatypes.Appointment;
 import datatypes.GuestData;
+import datatypes.PossibleDate;
 import interfaces.IHolidayOffer;
 
 /**

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import application.VRApplication;
+import application.CCApplication;
 import datatypes.AddressData;
 
 /**
@@ -44,7 +44,7 @@ public class StaffmemberGUI extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
 		request.setAttribute("navtype", "staffmember");
-
+/*
 		// Check wether the call is insertOffer or not
 		if (request.getParameter("action").equals("insertOffer")) {
 
@@ -57,7 +57,7 @@ public class StaffmemberGUI extends HttpServlet {
 			String fee = (String) request.getParameter("fee");
 
 			// Call application to insert offer
-			new VRApplication().insertOffer(startTime, endTime, new AddressData(street, town), capacity, fee);
+			new CCApplication().insertOffer(startTime, endTime, new AddressData(street, town), capacity, fee);
 
 			// Dispatch message to template engine
 			try {
@@ -69,7 +69,7 @@ public class StaffmemberGUI extends HttpServlet {
 				e.printStackTrace();
 			}
 			// Call doGet if request is not equal to insertOffer
-		} else
+		} else*/
 			doGet(request, response);
 
 	}

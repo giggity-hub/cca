@@ -1,4 +1,4 @@
-package dbadapter;
+package datatypes;
 
 import java.sql.Date;
 import java.sql.ResultSet;

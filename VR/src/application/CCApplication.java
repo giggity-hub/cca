@@ -2,18 +2,18 @@ package application;
 
 import dbadapter.DBFacade;
 
-public class CCAAplication {
+public class CCApplication {
 	
-	private static VRApplication instance;
+	private static CCApplication instance;
 
 	/**
 	 * Implementation of the Singleton pattern.
 	 * 
 	 * @return
 	 */
-	public static VRApplication getInstance() {
+	public static CCApplication getInstance() {
 		if (instance == null) {
-			instance = new VRApplication();
+			instance = new CCApplication();
 		}
 
 		return instance;

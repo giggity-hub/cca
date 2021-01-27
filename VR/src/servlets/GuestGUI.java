@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import application.VRApplication;
+import application.CCApplication;
 import datatypes.GuestData;
 import dbadapter.HolidayOffer;
 
@@ -67,7 +67,7 @@ public class GuestGUI extends HttpServlet {
 
 		// Set attribute for navigation type.
 		request.setAttribute("navtype", "guest");
-
+/*
 		// Generate and show results of a search
 		if (request.getParameter("action").equals("browseAvailableHolidayOffers")) {
 			request.setAttribute("pagetitle", "Search results");
@@ -75,7 +75,7 @@ public class GuestGUI extends HttpServlet {
 
 			// Call application to request the results
 			try {
-				availableOffers = VRApplication.getInstance().getAvailableHolidayOffers(
+				availableOffers = CCApplication.getInstance().getAvailableHolidayOffers(
 						request.getParameter("arrivalTime"), request.getParameter("departureTime"),
 						request.getParameter("persons"));
 
@@ -95,7 +95,7 @@ public class GuestGUI extends HttpServlet {
 			// Insert booking into database
 		} else if (request.getParameter("action").equals("bookHolidayOffer")) {
 			// Decide whether booking was successful or not
-			if (VRApplication.getInstance().makeBooking(request.getParameter("arrivalTime"),
+			if (CCApplication.getInstance().makeBooking(request.getParameter("arrivalTime"),
 					request.getParameter("departureTime"), request.getParameter("hid"),
 					new GuestData(request.getParameter("name"), request.getParameter("email")),
 					request.getParameter("persons")) != null) {
@@ -128,7 +128,7 @@ public class GuestGUI extends HttpServlet {
 			}
 			// If there is no page request, call doGet to show standard gui for
 			// guest
-		} else
+		} else*/
 			doGet(request, response);
 	}
 }
