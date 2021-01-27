@@ -1,6 +1,5 @@
 package application;
 
-// Bitte lösche diese Datei nicht auch noch, Lukas
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
