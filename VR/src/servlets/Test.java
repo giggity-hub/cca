@@ -64,28 +64,52 @@ public class Test extends HttpServlet {
 	/**
 	 * Call doGet instead of doPost
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+		
 		if (request.getParameter("action").equals("addAppointment")) {
 			System.out.println("Registered Post request with action=addAppointment");
 			
-			int creator = 69;
-			int groupId = 420;
-			Date[] dates = {Date.valueOf((String) request.getParameter("dates"))}; //only one date for now
-			int[] participants = participantArrayFromString(request.getParameter("participants"));
-			String description = (String)request.getParameter("description");
-			String name = (String)request.getParameter("name");
-			String location = (String) request.getParameter("location");
-			int duration = Integer.parseInt(request.getParameter("duration"));
-			Date deadline = Date.valueOf((String) request.getParameter("dates"));
+			if(request.getParameter("participants")==null || 
+					request.getParameter("description")==null ||
+					request.getParameter("name")==null ||
+					request.getParameter("location")==null ||
+					request.getParameter("duration")==null ||
+					request.getParameter("dates")==null ||
+					request.getParameter("numOfDates")==null) {
+				//todo: forward to errorpage
+				System.out.println("Anfrage falsch");
+				return;
+			}
+			System.out.println("Anfrage korrekt");
+			try {
+				int numOfDates = Integer.parseInt(request.getParameter("numOfDates"));
+				Date[] dates = new Date[numOfDates];
+				for(int i=0;i<numOfDates;i++){
+					dates[i]= Date.valueOf((String) request.getParameter("date"+i));
+				}
+				
+				int creator = 69;
+				int groupId = 420;
+				
+				int[] participants = participantArrayFromString(request.getParameter("participants"));
+				String description = (String)request.getParameter("description");
+				String name = (String)request.getParameter("name");
+				String location = (String) request.getParameter("location");
+				int duration = Integer.parseInt(request.getParameter("duration"));
+				Date deadline = Date.valueOf((String) request.getParameter("dates"));
+				
+				System.out.println(dates);
+				System.out.println(duration);
+				System.out.println(participants[1]);
+
+				//call the CCA singleton to post the appontment
+				DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 			
-			
-//			System.out.println(dates);
-//			System.out.println(duration);
-//			System.out.println(participants[1]);
-			
-			//call the CCA singleton to post the appontment
-			DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
 
 		}
 		
