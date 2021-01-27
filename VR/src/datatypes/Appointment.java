@@ -45,7 +45,34 @@ public class Appointment {
 		this.possibleDates = pds;
 	}
 	
+	public Appointment(ResultSet apt, ResultSet possibleDates) throws SQLException {
+		this.aid = apt.getInt("aid");
+		this.groupId =apt.getInt("groupId");
+		this.description = apt.getString("description");
+		this.name = apt.getString("name");
+		this.location = apt.getString("location");
+		this.duration = apt.getInt("duration");
+		this.deadline = apt.getDate("deadline");
+		this.isFinal = apt.getBoolean("isFinal");
+		
+		this.possibleDates = new ArrayList<PossibleDate>();
+		while (possibleDates.next()) {
+			this.possibleDates.add(new PossibleDate(possibleDates));
+		}
+	}
 	
+	public Appointment(int aid, int groupId, String description, String name, String location, int duration, Date deadline, Boolean isFinal, ArrayList<PossibleDate> possibleDates) {
+		this.aid = aid;
+		this.groupId = groupId;
+		this.description = description;
+		this.name = name;
+		this.location = location;
+		this.duration = duration;
+		this.deadline = deadline;
+		this.isFinal = isFinal;
+		this.possibleDates = possibleDates;
+	}
+
 	public Date makeFinal() {
 		Map<Date, Integer> map = new HashMap<Date, Integer>();
 		//i better hope this shit dont receives an empty array

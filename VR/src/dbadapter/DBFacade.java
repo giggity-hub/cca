@@ -84,16 +84,11 @@ public class DBFacade implements IHolidayOffer {
 				try(ResultSet rs = psSelect.executeQuery()){
 					//loop over every appointment in SQL res
 					while (rs.next()) {
-						Appointment a = new Appointment(rs);
-						
-						
-						psSelectPDs.setInt(1, a.aid);
+
+						psSelectPDs.setInt(1, rs.getInt("aid"));
 						try (ResultSet pdrs = psSelectPDs.executeQuery()) {
-							ArrayList<PossibleDate> possibleDates = new ArrayList<PossibleDate>();
-							while (pdrs.next()) {
-								possibleDates.add(new PossibleDate(pdrs));
-							}
-							a.setPossibleDates(possibleDates);
+							Appointment a = new Appointment(rs,pdrs);
+						
 							if (a.possibleDates.size() > 0) {
 								Date finalDate = a.makeFinal();
 								System.out.println(finalDate);
