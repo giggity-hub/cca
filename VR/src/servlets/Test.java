@@ -8,6 +8,7 @@ package servlets;
 //ich bin der uwe und ich bin auch dabei
 //Alex ist wieder da
 import java.io.IOException;
+
 import java.sql.Date;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import application.CCApplication;
+import dbadapter.DBFacade;
 
 /**
  * 
@@ -24,6 +26,9 @@ import application.CCApplication;
  *         This servlet only contains a small index webpage where the user is
  *         able to choose his role.
  */
+
+
+
 public class Test extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -102,10 +107,8 @@ public class Test extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			
-			
 			//call the CCA singleton to post the appontment
-//			CCApplication.getInstance().postAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
+			DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
 
 		}
 		
