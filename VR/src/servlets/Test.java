@@ -1,6 +1,6 @@
 package servlets;
 
-//asdfasdfasdfasdfadsf
+//Dies ist ein Kommentar von Stefan
 // Hello there Stefan war hier
 
 import java.io.IOException;
