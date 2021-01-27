@@ -67,7 +67,7 @@ public class Test extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		
 		if (request.getParameter("action").equals("addAppointment")) {
-			//System.out.println("Registered Post request with action=addAppointment");
+			System.out.println("Registered Post request with action=addAppointment");
 			
 			if(request.getParameter("participants")==null || 
 					request.getParameter("description")==null ||
@@ -101,14 +101,15 @@ public class Test extends HttpServlet {
 				System.out.println(dates);
 				System.out.println(duration);
 				System.out.println(participants[1]);
+
+				//call the CCA singleton to post the appontment
+				DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
 			}
 			catch(Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 			
-			//call the CCA singleton to post the appontment
-			DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
 
 		}
 		
