@@ -64,7 +64,7 @@ public class GuestGUI extends HttpServlet {
 	 * doPost manages handling of submitted forms.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
+		System.out.println("POST request auf guestGUI registered");
 		// Set attribute for navigation type.
 		request.setAttribute("navtype", "guest");
 /*
