@@ -50,7 +50,7 @@
 		</table>
 		
 	</fieldset>
-	<button type="submit" id="SelectHOWebpage" name="SelectHOWebpage" value="Submit">Submit!</button>
+	<button type="submit" id="addAppointment" name="addAppointment" value="Submit">Submit!</button>
 </form>
 </div>
 </div>
