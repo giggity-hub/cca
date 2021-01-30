@@ -7,7 +7,7 @@
 
 <div class="card">
 <div class="card-body">
-<form method="POST" action="test?action=addAppointment">
+<form method="POST" action="add?action=addAppointment">
 	<fieldset id="browseAvailableOffers">
 
 		<table style="width:100%">

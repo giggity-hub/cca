@@ -82,11 +82,11 @@
     <auth-constraint/>
   </security-constraint>
   <servlet>
-    <servlet-name>Test</servlet-name>
-    <servlet-class>servlets.Test</servlet-class>
+    <servlet-name>Add</servlet-name>
+    <servlet-class>servlets.Add</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Test</servlet-name>
-    <url-pattern>/test</url-pattern>
+    <servlet-name>Add</servlet-name>
+    <url-pattern>/add</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -29,7 +29,7 @@ import dbadapter.DBFacade;
 
 
 
-public class Test extends HttpServlet {
+public class Add extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class Test extends HttpServlet {
 
 		// Dispatch request to template engine
 		try {
-			request.getRequestDispatcher("/templates/testWebpage.ftl").forward(
+			request.getRequestDispatcher("/templates/add.ftl").forward(
 					request, response);
 		} catch (ServletException | IOException e) {
 			request.setAttribute("errormessage",
