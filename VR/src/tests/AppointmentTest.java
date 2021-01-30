@@ -1,4 +1,4 @@
-package datatypes;
+package tests;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import datatypes.Appointment;
+import datatypes.PossibleDate;
+
 import org.junit.Before;
 
 
