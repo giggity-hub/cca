@@ -97,4 +97,12 @@
     <servlet-name>calendar_servlet</servlet-name>
     <url-pattern>/calendar</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>reply_servlet</servlet-name>
+    <servlet-class>servlets.Reply</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>reply_servlet</servlet-name>
+    <url-pattern>/reply</url-pattern>
+  </servlet-mapping>
 </web-app>
