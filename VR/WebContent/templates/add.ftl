@@ -55,6 +55,4 @@
 
 
 
-<h1>You're mom gay</h1>
-
 <#include "footer.ftl">
