@@ -5,14 +5,23 @@ import org.junit.Before;
 import org.junit.Test;
 
 import dbadapter.DBFacade;
+import junit.framework.TestCase;
 import net.sourceforge.jwebunit.junit.WebTester;
 
 import org.junit.After;
 
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+import java.sql.Date;
 
-public class AddWebTest {
+public class AddWebTest extends TestCase {
+	
+	public AddWebTest() {
+		super();
+	}
 	
 	WebTester tester;
 	
@@ -26,6 +35,8 @@ public class AddWebTest {
 	@Test
 	public void testAddAppointment() {
 		
+//		DBFacade stub = mock(DBFacade.class);
+//		DBFacade.setInstance(stub);
 		
 		
 		
@@ -61,9 +72,12 @@ public class AddWebTest {
 		tester.clickButton("addAppointment");
 		
 		
-		
-		
-//		fail("Not yet implemented");
+//		int[] participants = {1,2,3};
+//		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
+//		verify(stub, times(1)).creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
+
 	}
 
 }
+
+

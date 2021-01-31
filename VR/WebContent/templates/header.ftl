@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<title>Colaborative Calendar - ${pagetitle}</title>
 	<!-- <link type="text/css" href="css/style.css" rel="stylesheet" media="screen" /> -->
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" /> -->
   	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	
@@ -53,7 +53,11 @@
 </head>
 <body>
 <div id="wrapper">
+<!-- 
 	<div id="logo">Collaborative Calendar<br>Software Engineering Example</div>
+	
+	
+	
     <ul id="navigation">
     	<li><a href="index" title="Index">View Homesite</a></li>
 	<#if navtype == "guest">
@@ -65,4 +69,42 @@
 		<li><a href="guestgui" title="guest">Guest</a></li>
 	</#if>
     </ul>
-	<div id="content">
+ -->
+ 
+ 
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="index">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="index">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="calendar">Calendar</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="add">Add</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="reply?page=invitations">Reply</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+ 
+ 
+ 
+ 
+ 
+<div id="content">
+	
+	
+	
+	
+	
+	
+	
+	

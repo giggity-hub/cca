@@ -2,8 +2,6 @@
 
 
 
-<b>Welcome to our little demonstration on the VR Webapp</b><br><br>
-
 
 <div class="card">
 <div class="card-body">
