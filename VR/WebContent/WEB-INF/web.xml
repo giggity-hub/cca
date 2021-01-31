@@ -82,11 +82,19 @@
     <auth-constraint/>
   </security-constraint>
   <servlet>
-    <servlet-name>Add</servlet-name>
+    <servlet-name>add_servlet</servlet-name>
     <servlet-class>servlets.Add</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Add</servlet-name>
+    <servlet-name>add_servlet</servlet-name>
     <url-pattern>/add</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>calendar_servlet</servlet-name>
+    <servlet-class>servlets.Calendar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>calendar_servlet</servlet-name>
+    <url-pattern>/calendar</url-pattern>
   </servlet-mapping>
 </web-app>
