@@ -12,7 +12,13 @@ public class Calendar extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		// Set pagetitle and navtype
+		request.setAttribute("pagetitle", "Calendar");
+		request.setAttribute("navtype", "general");
+
 		// Dispatch request to template engine
 		try {
 			request.getRequestDispatcher("/templates/calendar.ftl").forward(
