@@ -35,8 +35,8 @@ public class AddWebTest extends TestCase {
 	@Test
 	public void testAddAppointment() {
 		
-//		DBFacade stub = mock(DBFacade.class);
-//		DBFacade.setInstance(stub);
+		DBFacade stub = mock(DBFacade.class);
+		DBFacade.setInstance(stub);
 		
 		
 		
@@ -72,9 +72,9 @@ public class AddWebTest extends TestCase {
 		tester.clickButton("addAppointment");
 		
 		
-//		int[] participants = {1,2,3};
-//		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
-//		verify(stub, times(1)).creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
+		int[] participants = {1,2,3};
+		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
+		verify(stub, times(1)).creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
 
 	}
 
