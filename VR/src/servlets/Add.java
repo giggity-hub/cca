@@ -98,9 +98,7 @@ public class Add extends HttpServlet {
 				int duration = Integer.parseInt(request.getParameter("duration"));
 				Date deadline = Date.valueOf((String) request.getParameter("deadline"));
 				
-				System.out.println(dates);
-				System.out.println(duration);
-				System.out.println(participants[1]);
+
 
 				//call the CCA singleton to post the appontment
 				DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
