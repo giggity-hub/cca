@@ -62,11 +62,34 @@ public class DBFacade implements IHolidayOffer {
 	}
 	
 	public ArrayList<Appointment> getInvitations(int userId, int groupId){
+
+		
+//		apts.add(new Appointment(88, 88, "description1", "name1", "loc", 500, Date.valueOf("2020-02-02"), false));
+//		apts.add(new Appointment(89, 88, "description1", "name2", "loc", 500, Date.valueOf("2020-02-02"), false));
+//		apts.add(new Appointment(90, 88, "description1", "name3", "loc", 500, Date.valueOf("2020-02-02"), false));
+		String selectInvitations = "SELECT * FROM Appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=? ) AND aid NOT IN (SELECT aid FROM possibleDates WHERE mid=?)";
 		ArrayList<Appointment> apts = new ArrayList<Appointment>();
 		
-		apts.add(new Appointment(88, 88, "description1", "name1", "loc", 500, Date.valueOf("2020-02-02"), false));
-		apts.add(new Appointment(89, 88, "description1", "name2", "loc", 500, Date.valueOf("2020-02-02"), false));
-		apts.add(new Appointment(90, 88, "description1", "name3", "loc", 500, Date.valueOf("2020-02-02"), false));
+		try (Connection connection = DriverManager
+				.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+			try (PreparedStatement psSelect = connection.prepareStatement(selectInvitations)) {
+				psSelect.setInt(1, userId);
+				psSelect.setInt(2, userId);
+				try(ResultSet rs = psSelect.executeQuery()){
+					
+					while(rs.next()) {
+						apts.add(new Appointment(rs));
+					}
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 		return apts;
 	}

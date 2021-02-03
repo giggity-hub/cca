@@ -40,7 +40,7 @@ public class Add extends HttpServlet {
 		if(!SessionHelper.validate(request,response))
 			return;
 		
-		request.setAttribute("pagetitle", "Termin hinzufügen");
+		request.setAttribute("pagetitle", "Termin hinzufugen");
 
 		// Dispatch request to template engine
 		try {

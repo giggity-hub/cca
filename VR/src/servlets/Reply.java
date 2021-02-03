@@ -53,9 +53,9 @@ public class Reply extends HttpServlet {
 				ArrayList<Appointment> invitations = DBFacade.getInstance().getInvitations(userId, groupId);
 				
 				
-				System.out.println(invitations.get(0).name);
-				System.out.println(invitations.get(1).name);
-				System.out.println(invitations.get(2).name);
+//				System.out.println(invitations.get(0).name);
+//				System.out.println(invitations.get(1).name);
+//				System.out.println(invitations.get(2).name);
 				// Set request attributes
 				request.setAttribute("pagetitle", "Invitations");
 				request.setAttribute("invitations", invitations);
