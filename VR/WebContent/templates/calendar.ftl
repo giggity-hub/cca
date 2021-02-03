@@ -5,7 +5,6 @@
 
 <table id="appointments">
 	<tr>
-		<th>#</th>
 		<th>Name</th>
 		<th>Beschreibung</th>
 		<th>Ort</th>
@@ -19,11 +18,11 @@
 		<td>${apt.description}</td>
 		<td>${apt.location}</td>
 		<td>${apt.duration}</td>
-		<table id="appointments">
-		<#list appointments.possibleDates as pd>
+		<td><table id="appointments">
+		<#list apt.possibleDates as pd>
 			<tr><td>${pd.date}</td></td>
 		</#list>
-		</table>
+		</table></td>
 		<td>${apt.deadline}</td>
 	</tr>
 	</#list>
