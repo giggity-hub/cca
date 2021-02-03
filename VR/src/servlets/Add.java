@@ -35,12 +35,12 @@ public class Add extends HttpServlet {
 	/**
 	 * doGet contains the call for the index webpage
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-		// Set pagetitle and navtype
-		request.setAttribute("pagetitle", "Welcome");
-		request.setAttribute("navtype", "general");
+		if(!checkForValidSession(request,response))
+			return;
+		
+		request.setAttribute("pagetitle", "Termin hinzufügen");
 
 		// Dispatch request to template engine
 		try {
@@ -64,6 +64,9 @@ public class Add extends HttpServlet {
 	 * Call doGet instead of doPost
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+		
+		if(!checkForValidSession(request,response))
+			return;
 		
 		if (request.getParameter("action").equals("addAppointment")) {
 //			System.out.println("Registered Post request with action=addAppointment");
@@ -112,6 +115,49 @@ public class Add extends HttpServlet {
 
 		}
 		
-		doGet(request, response);
+		try {
+			request.getRequestDispatcher("/templates/add.ftl").forward(
+					request, response);
+		} catch (ServletException | IOException e) {
+			request.setAttribute("errormessage",
+					"Template error: please contact the administrator");
+			e.printStackTrace();
+		}
+	}
+	
+	private boolean checkForValidSession(HttpServletRequest request, HttpServletResponse response) {
+		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((String)request.getSession(false).getAttribute("userid")).isBlank()) {
+			try {
+				request.setAttribute("navtype", "notSignedIn");
+				request.setAttribute("pagetitle", "Bitte Einloggen");
+				request.getRequestDispatcher("/templates/index.ftl").forward(request, response);
+			} catch (ServletException | IOException e) {
+				request.setAttribute("errormessage", "Template error: please contact the administrator");
+				e.printStackTrace();
+			}
+			
+			return false;
+		}
+		else if (request.getParameter("action") != null && request.getParameter("action").equals("logOut")) {
+			if (request.getSession(false) != null)
+				request.getSession(false).invalidate();
+			System.out.println("ausgeloggt");
+			
+			try {
+				request.setAttribute("navtype", "notSignedIn");
+				request.setAttribute("pagetitle", "Bitte Einloggen");
+				request.getRequestDispatcher("/templates/index.ftl").forward(request, response);
+			} catch (ServletException | IOException e) {
+				request.setAttribute("errormessage", "Template error: please contact the administrator");
+				e.printStackTrace();
+			}
+			
+			return false;
+		}
+		else {
+			System.out.println((String) request.getSession(false).getAttribute("userid"));
+			request.setAttribute("navtype", "signedIn");
+			return true;
+		}
 	}
 }

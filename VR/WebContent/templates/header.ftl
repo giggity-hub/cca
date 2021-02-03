@@ -52,32 +52,12 @@
   	</script>
 </head>
 <body>
-<div id="wrapper">
-<!-- 
-	<div id="logo">Collaborative Calendar<br>Software Engineering Example</div>
-	
-	
-	
-    <ul id="navigation">
-    	<li><a href="index" title="Index">View Homesite</a></li>
-	<#if navtype == "guest">
-    	<li><a href="guestgui?page=defaultwebpage" title="Search Offers">Search Offers</a></li>	
-	<#elseif navtype == "staffmember">
-		<li><a href="staffmembergui?page=insertoffer" title="Insert Offer">Insert Offer</a></li>
-	<#else>
-    	<li><a href="staffmembergui" title="Staffmember">Staffmember</a></li>
-		<li><a href="guestgui" title="guest">Guest</a></li>
-	</#if>
-    </ul>
- -->
- 
+<div id="wrapper"> 
  
  <nav class="navbar navbar-expand navbar-dark bg-dark">
   <a class="navbar-brand" href="index">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
   <div class="collapse navbar-collapse" id="navbarNav">
+  <#if navtype == "signedIn">
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" href="index">Home</a>
@@ -91,7 +71,25 @@
       <li class="nav-item">
         <a class="nav-link" href="reply?page=invitations">Reply</a>
       </li>
+      <li class="nav-item">
+        <form method="GET" action="index">
+          <button type="submit" id="logOut" name="action" value="logOut">Ausloggen</button>
+        </form>
+      </li>
     </ul>
+  <#else>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link">Bitte gib mir eine User id:</a>
+      </li>
+      <li class="nav-item">
+        <form method="POST" action="index?action=signin">
+          <input type="text" name="userid">
+          <button type="submit" id="signIn" name="singnIn" value="Submit">Ok</button>
+        </form>
+      </li>
+    </ul
+    </#if>>
   </div>
 </nav>
  
