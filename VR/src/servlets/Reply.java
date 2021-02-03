@@ -96,7 +96,7 @@ public class Reply extends HttpServlet {
 				i++;
 			}
 			
-			
+			System.out.println("amount of dates: " + possibleDates.size());
 			if (possibleDates.size() > 0) {
 				// Set request attributes
 //				int uid = 69;
@@ -125,22 +125,6 @@ public class Reply extends HttpServlet {
 				} catch (ServletException | IOException e) {
 					e.printStackTrace();
 				}
-			}
-			
-//			System.out.println("scrt: " + request.getParameter("date1"));
-			
-			System.out.println("amount of dates: " + possibleDates.size());
-			
-			
-			try {
-//				request.getParameterNames();
-//				request.setAttribute("possibleDates", possibleDates);
-				request.setAttribute("aid", aid);
-				request.setAttribute("pagetitle", "scurr");
-				request.setAttribute("navtype", "guest");
-				request.getRequestDispatcher("/templates/index.ftl").forward(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}else {
 			doGet(request, response);
