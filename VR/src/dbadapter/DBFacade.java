@@ -185,7 +185,46 @@ public class DBFacade implements IHolidayOffer {
 		}
 	}
 	
-	
+	public Appointment[] getCalendar(int userId) {
+
+		String selapt = "SELECT * FROM Appointments WHERE aid in (SELECT aid FROM Participants WHERE mid = ?)";
+		String selpd = "SELECT * FROM PossibleDates WHERE aid = ?";
+		Appointment[] res = null;
+
+		try (Connection connection = DriverManager.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+
+			try (PreparedStatement psapt = connection.prepareStatement(selapt);
+					PreparedStatement pspd = connection.prepareStatement(selpd)) {
+				psapt.setInt(1, userId);
+
+				try (ResultSet rs = psapt.executeQuery()) {
+					int length = 0;
+					if (rs.last()) {
+						length = rs.getRow();
+						rs.beforeFirst();
+					}
+					res = new Appointment[length];
+
+					for (int i = 0; i < length && rs.next(); i++) {
+
+						pspd.setInt(1, rs.getInt("aid"));
+
+						try (ResultSet rspd = pspd.executeQuery()) {
+							res[i] = new Appointment(rs, rspd);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return res;
+
+	}
 	
 	
 	
