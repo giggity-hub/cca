@@ -67,7 +67,8 @@ public class DBFacade implements IHolidayOffer {
 //		apts.add(new Appointment(88, 88, "description1", "name1", "loc", 500, Date.valueOf("2020-02-02"), false));
 //		apts.add(new Appointment(89, 88, "description1", "name2", "loc", 500, Date.valueOf("2020-02-02"), false));
 //		apts.add(new Appointment(90, 88, "description1", "name3", "loc", 500, Date.valueOf("2020-02-02"), false));
-		String selectInvitations = "SELECT * FROM Appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=? ) AND aid NOT IN (SELECT aid FROM possibleDates WHERE mid=?)";
+		String selectInvitations = "SELECT * FROM Appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?)"
+				+ "AND aid NOT IN (SELECT aid FROM possibleDates WHERE mid=?)";
 		ArrayList<Appointment> apts = new ArrayList<Appointment>();
 		
 		try (Connection connection = DriverManager
