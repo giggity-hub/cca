@@ -20,4 +20,17 @@ public class PossibleDate {
 		this.mid = rs.getInt("mid");
 		this.aid = rs.getInt("aid");
 	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public int getMid() {
+		return mid;
+	}
+
+	public int getAid() {
+		return aid;
+	}
+	
 }

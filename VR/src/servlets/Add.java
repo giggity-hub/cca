@@ -99,7 +99,7 @@ public class Add extends HttpServlet {
 				int duration = Integer.parseInt(request.getParameter("duration"));
 				Date deadline = Date.valueOf((String) request.getParameter("deadline"));
 				
-				int groupID = Integer.parseInt(request.getParameter("groudID"));
+				int groupID = Integer.parseInt(request.getParameter("groupID"));
 
 
 				//call the CCA singleton to post the appontment
@@ -116,7 +116,9 @@ public class Add extends HttpServlet {
 		}
 		
 		try {
-			request.getRequestDispatcher("/templates/add.ftl").forward(
+			request.setAttribute("pagetitle", "Super!");
+			request.setAttribute("message", "Termin Erfolgreich hinzugefügt");
+			request.getRequestDispatcher("/templates/okRepresentation.ftl").forward(
 					request, response);
 		} catch (ServletException | IOException e) {
 			request.setAttribute("errormessage",

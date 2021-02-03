@@ -45,7 +45,7 @@ public class SessionHelper {
 	
 	public static int getUserId(HttpServletRequest request) {
 		try {
-			return Integer.parseInt((String) request.getSession(false).getAttribute("userId"));
+			return Integer.parseInt((String) request.getSession(false).getAttribute("userid"));
 		} catch (Exception e) {
 			System.out.println("Die Session ist kaputt :(");
 			request.getSession().invalidate();
