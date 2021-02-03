@@ -57,7 +57,9 @@ public class DBFacade implements IHolidayOffer {
 		instance = dbfacade;
 	}
 	
-	
+	public void replyingToAppointment(int userId, int aid, ArrayList<Date> pds ) {
+		
+	}
 	
 	public ArrayList<Appointment> getInvitations(int userId, int groupId){
 		ArrayList<Appointment> apts = new ArrayList<Appointment>();

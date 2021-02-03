@@ -20,9 +20,10 @@ public class Reply extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		
+		if(!SessionHelper.validate(request,response))return;
 
-		// Set navtype
-		request.setAttribute("navtype", "guest");
+
 
 		// Catch error if there is no page contained in the request
 		String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
@@ -71,19 +72,70 @@ public class Reply extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		if(!SessionHelper.validate(request,response))return;
 		
 		if (request.getParameter("action").equals("postPossibleDates")) {
 			
 			
 			int aid = Integer.parseInt(request.getParameter("aid"));
-			ArrayList<String> possibleDates = DBFacade.getInstance().getPossibleDates(aid);
-			request.setAttribute("aid", aid);
+			ArrayList<String> dates = DBFacade.getInstance().getPossibleDates(aid);
+			
 			System.out.println(aid);
+			
+			ArrayList<Date> possibleDates = new ArrayList<Date>();
+			
+			for (String date: dates) {
+				if (request.getParameter(date) != null) {
+					possibleDates.add(Date.valueOf(date));
+				}
+			}
+			
+			int i = 1;
+			while(request.getParameter("date" + i) != null && request.getParameter("date" + i) != "" ) {
+				possibleDates.add(Date.valueOf(request.getParameter("date" + i)));
+				i++;
+			}
+			
+			
+			if (possibleDates.size() > 0) {
+				// Set request attributes
+//				int uid = 69;
+//				DBFacade.getInstance().replyingToAppointment(uid, aid, possibleDates);
+				
+				request.setAttribute("pagetitle", "Reply successfull");
+				request.setAttribute("message",
+						"Wow du hast 1 reply geschickt. Fühlst du dich jtz cool oder was?");
+
+				// Dispatch to template engine
+				try {
+					request.getRequestDispatcher("/templates/okRepresentation.ftl").forward(request, response);
+				} catch (ServletException | IOException e) {
+					e.printStackTrace();
+				}
+				
+				
+			}else {
+				request.setAttribute("pagetitle", "Reply failed");
+				request.setAttribute("message",
+						"Du dumme Miesgebuaht. hast du nicht einen freien tag?");
+
+				try {
+					request.getRequestDispatcher("/templates/failInfoRepresentation.ftl").forward(request,
+							response);
+				} catch (ServletException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+//			System.out.println("scrt: " + request.getParameter("date1"));
+			
+			System.out.println("amount of dates: " + possibleDates.size());
 			
 			
 			try {
 //				request.getParameterNames();
 //				request.setAttribute("possibleDates", possibleDates);
+				request.setAttribute("aid", aid);
 				request.setAttribute("pagetitle", "scurr");
 				request.setAttribute("navtype", "guest");
 				request.getRequestDispatcher("/templates/index.ftl").forward(request, response);

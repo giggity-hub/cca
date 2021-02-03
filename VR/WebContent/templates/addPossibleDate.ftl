@@ -14,7 +14,26 @@
 		</br>
 	</#list>
 	
-	<button class="btn btn-primary" type="submit" id="addPossibleDates" name="addPossibleDates" value="Submit">Submit!</button>
+	
+	
+	
+	
+	
+	
+Alternative Dates </br>
+	
+<input type="hidden" id="numOfDates" name="numOfDates" value ="1">
+<div id=inputDates>
+	<input type="date" name="date1"></br>
+</div>
+
+
+<button type="button" onclick="addDate()">+</button>
+<button type="button" onclick="removeDate()">-</button>
+				
+				
+</br> </br>				
+<button class="btn btn-primary" type="submit" id="addPossibleDates" name="addPossibleDates" value="Submit">Submit!</button>							
 </form>
 
 
