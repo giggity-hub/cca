@@ -101,7 +101,7 @@ public class Add extends HttpServlet {
 
 
 				//call the CCA singleton to post the appontment
-				DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
+				CCApplication.getInstance().createAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
 			}
 			catch(Exception e) {
 				System.out.println(e.getMessage());

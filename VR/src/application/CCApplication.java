@@ -1,5 +1,7 @@
 package application;
 
+import java.sql.Date;
+
 import dbadapter.DBFacade;
 
 public class CCApplication {
@@ -22,6 +24,12 @@ public class CCApplication {
 	
 	public void checkDeadlines() {
 		DBFacade.getInstance().finalizingAppointment();
+	}
+	
+	public void createAppointment(int creator, Date[] dates, int[] participants, String description, String name,
+			String location, int duration, Date deadline, int groupId) {
+		DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
+		
 	}
 	
 	
