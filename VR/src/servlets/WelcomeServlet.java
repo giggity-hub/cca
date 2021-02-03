@@ -24,7 +24,22 @@ public class WelcomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 	
-		checkForValidSession(request, response);
+		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((String) request.getSession(false).getAttribute("userid")).isBlank()) {
+			request.setAttribute("navtype", "notSignedIn");
+			request.setAttribute("pagetitle", "Bitte Einloggen");
+		} 
+		else if (request.getParameter("action") != null && request.getParameter("action").equals("logOut")) {
+			if (request.getSession(false) != null)
+				request.getSession(false).invalidate();
+			System.out.println("ausgeloggt");
+			request.setAttribute("navtype", "notSignedIn");
+			request.setAttribute("pagetitle", "Bitte Einloggen");
+		} 
+		else {
+			System.out.println((String) request.getSession(false).getAttribute("userid"));
+			request.setAttribute("navtype", "signedIn");
+			request.setAttribute("pagetitle", "Wilkommen");
+		}
 
 		// Dispatch request to template engine
 		try {
@@ -50,27 +65,5 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		
 		doGet(request, response);
-	}
-	
-	private boolean checkForValidSession(HttpServletRequest request, HttpServletResponse response) {
-		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((String) request.getSession(false).getAttribute("userid")).isBlank()) {
-			request.setAttribute("navtype", "notSignedIn");
-			request.setAttribute("pagetitle", "Bitte Einloggen");
-
-			return false;
-		} else if (request.getParameter("action") != null && request.getParameter("action").equals("logOut")) {
-			if (request.getSession(false) != null)
-				request.getSession(false).invalidate();
-			System.out.println("ausgeloggt");
-			request.setAttribute("navtype", "notSignedIn");
-			request.setAttribute("pagetitle", "Bitte Einloggen");
-
-			return false;
-		} else {
-			System.out.println((String) request.getSession(false).getAttribute("userid"));
-			request.setAttribute("navtype", "signedIn");
-			request.setAttribute("pagetitle", "Wilkommen");
-			return true;
-		}
 	}
 }
