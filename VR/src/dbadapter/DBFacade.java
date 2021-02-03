@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 //import java.util.Date;
-
+import java.util.Calendar;
 import java.sql.Date;
 
 import datatypes.AddressData;
@@ -121,7 +121,7 @@ public class DBFacade implements IHolidayOffer {
 	public void finalizingAppointment() {
 		System.out.println("die finalizing methode wurde gecalled");
 		// Declare necessary SQL statement.
-		String selectAppointmentsOverdue = "SELECT * FROM appointments WHERE (isFinal=false)";
+		String selectAppointmentsOverdue = "SELECT * FROM appointments WHERE (isFinal=false) AND deadline < ?";
 		String selectPossibleDates = "SELECT * FROM possibleDates WHERE aid=?";
 		String setFinal = "UPDATE appointments SET isFinal = true WHERE aid=?";
 
@@ -138,6 +138,10 @@ public class DBFacade implements IHolidayOffer {
 					PreparedStatement psSetFinal = connection.prepareStatement(setFinal);
 					PreparedStatement psDeletePDs = connection.prepareStatement(deletePossibleDates);
 					PreparedStatement psDeletePars = connection.prepareStatement(deleteParticipants)) {
+				//set today
+				Calendar calendar = Calendar.getInstance();
+				java.sql.Date today = new java.sql.Date(calendar.getTime().getTime());
+				psSelect.setDate(1, today);
 				try(ResultSet rs = psSelect.executeQuery()){
 					//loop over every appointment in SQL res
 					while (rs.next()) {
