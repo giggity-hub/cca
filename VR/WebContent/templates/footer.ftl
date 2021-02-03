@@ -1,6 +1,7 @@
 	</div>
-	<div id="copyright">
-		&copy; 2015 <a href="http://swe.uni-due.de" title="SWE Uni Due">Software Engineering - University of Duisburg-Essen</a>
+	</br>
+	<div style="text-align:center">
+		&copy; 2021 Team 12
 	</div>
 </div>
 </body>

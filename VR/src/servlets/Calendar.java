@@ -2,7 +2,6 @@ package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +17,9 @@ public class Calendar extends HttpServlet {
 			return;
 		
 		Appointment[] appointments = DBFacade.getInstance().getCalendar(SessionHelper.getUserId(request));
+		
+		request.setAttribute("noAppointments", appointments == null || appointments.length == 0);
 		request.setAttribute("appointments", appointments);
-		
-		
 		request.setAttribute("pagetitle", "Calendar");
 		try {
 			request.getRequestDispatcher("/templates/calendar.ftl").forward(request, response);

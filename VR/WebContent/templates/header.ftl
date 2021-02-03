@@ -3,12 +3,11 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Colaborative Calendar - ${pagetitle}</title>
-	<!-- <link type="text/css" href="css/style.css" rel="stylesheet" media="screen" /> -->
-	<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" /> -->
   	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	
   	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<link type="text/css" href="css/style.css" rel="stylesheet" />
   	<script>
   		$(function() {
     		$( "#datepicker2" ).datepicker(
@@ -55,7 +54,6 @@
 <div id="wrapper"> 
  
  <nav class="navbar navbar-expand navbar-dark bg-dark">
-  <a class="navbar-brand" href="index">Navbar</a>
   <div class="collapse navbar-collapse" id="navbarNav">
   <#if navtype == "signedIn">
     <ul class="navbar-nav">
@@ -72,9 +70,7 @@
         <a class="nav-link" href="reply?page=invitations">Reply</a>
       </li>
       <li class="nav-item">
-        <form method="GET" action="index">
-          <button type="submit" id="logOut" name="action" value="logOut">Ausloggen</button>
-        </form>
+          <a class="nav-link" href="index?action=logOut">Ausloggen</a>
       </li>
     </ul>
   <#else>

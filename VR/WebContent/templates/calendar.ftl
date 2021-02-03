@@ -1,30 +1,33 @@
 <#include "header.ftl">
 
+<#if noAppointments>
+<h1>Keine Termine in der Datenbank</h1>
+<#else>
 <h1>Deine Termine</h1>
 </br>
-
-<table id="appointments">
+<table id="appointments" style="width:100%;">
 	<tr>
-		<th>Name</th>
-		<th>Beschreibung</th>
-		<th>Ort</th>
-		<th>Dauer</th>
-		<th>Daten</th>
-		<th>Deadline</th>
+		<th style="width:15%;">Name</th>
+		<th style="width:30%;">Beschreibung</th>
+		<th style="width:20%;">Ort</th>
+		<th style="width:10%;">Dauer</th>
+		<th style="width:15%;">Daten</th>
+		<th style="width:15%;">Deadline</th>
 	</tr>
 	<#list appointments as apt>
-	<tr>
+	<tr style="background-color:<#if apt.isFinal>lightgreen<#else>lightcoral</#if>">
 		<td><a href="reply?action=selectApointment&amp;aid=${apt.aid}" title="Make Booking">${apt.name}</a></td>
 		<td>${apt.description}</td>
 		<td>${apt.location}</td>
 		<td>${apt.duration}</td>
 		<td><table id="appointments">
 		<#list apt.possibleDates as pd>
-			<tr><td>${pd.date}</td></td>
+			<tr style="border-bottom:none; line-height:20pt"><td>${pd.date}</td></td>
 		</#list>
 		</table></td>
 		<td>${apt.deadline}</td>
 	</tr>
 	</#list>
 </table>
+</#if>
 <#include "footer.ftl">

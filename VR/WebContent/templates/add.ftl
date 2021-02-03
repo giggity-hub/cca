@@ -3,12 +3,12 @@
 
 
 
-<div class="card">
+<div class="card" style="border:none;">
 <div class="card-body">
 <form method="POST" action="add?action=addAppointment">
 	<fieldset id="browseAvailableOffers">
 
-		<table style="width:100%">
+		<table style="width:100%;">
 		<tr>
 			<td>Name</td>
 			<td><input type="text" name="name"></td>
@@ -52,6 +52,7 @@
 		</table>
 		
 	</fieldset>
+	</br>
 	<button type="submit" id="addAppointment" name="addAppointment" value="Submit">Submit!</button>
 </form>
 </div>

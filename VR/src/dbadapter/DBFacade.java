@@ -52,9 +52,9 @@ public class DBFacade implements IHolidayOffer {
 
 		return instance;
 	}
-
-	public static void setInstance(DBFacade dbfacade) {
-		instance = dbfacade;
+	
+	public static void setInstance(DBFacade instance) {
+		DBFacade.instance = instance;
 	}
 	
 	public void replyingToAppointment(int userId, int aid, ArrayList<Date> pds ) {
@@ -101,7 +101,6 @@ public class DBFacade implements IHolidayOffer {
 		pds.add(Date.valueOf("2020-02-03").toString());
 		pds.add(Date.valueOf("2020-02-04").toString());
 		return pds;
-//		return 
 	}
 	
 	
@@ -235,7 +234,7 @@ public class DBFacade implements IHolidayOffer {
 	public Appointment[] getCalendar(int userId) {
 
 		String selapt = "SELECT * FROM Appointments WHERE aid in (SELECT aid FROM Participants WHERE mid = ?)";
-		String selpd = "SELECT * FROM PossibleDates WHERE aid = ?";
+		String selpd = "SELECT * FROM PossibleDates WHERE aid = ? GROUP BY date";
 		Appointment[] res = null;
 
 		try (Connection connection = DriverManager.getConnection(
