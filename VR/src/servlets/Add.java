@@ -38,7 +38,7 @@ public class Add extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-		if(!checkForValidSession(request,response))
+		if(!SessionHelper.validate(request,response))
 			return;
 		
 		request.setAttribute("pagetitle", "Termin hinzufügen");
