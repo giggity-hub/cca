@@ -66,7 +66,7 @@ public class Add extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		
-		if(!checkForValidSession(request,response))
+		if(!SessionHelper.validate(request,response))
 			return;
 		
 		if (request.getParameter("action").equals("addAppointment")) {
@@ -121,42 +121,6 @@ public class Add extends HttpServlet {
 			request.setAttribute("errormessage",
 					"Template error: please contact the administrator");
 			e.printStackTrace();
-		}
-	}
-	
-	private boolean checkForValidSession(HttpServletRequest request, HttpServletResponse response) {
-		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((String)request.getSession(false).getAttribute("userid")).isBlank()) {
-			try {
-				request.setAttribute("navtype", "notSignedIn");
-				request.setAttribute("pagetitle", "Bitte Einloggen");
-				request.getRequestDispatcher("/templates/index.ftl").forward(request, response);
-			} catch (ServletException | IOException e) {
-				request.setAttribute("errormessage", "Template error: please contact the administrator");
-				e.printStackTrace();
-			}
-			
-			return false;
-		}
-		else if (request.getParameter("action") != null && request.getParameter("action").equals("logOut")) {
-			if (request.getSession(false) != null)
-				request.getSession(false).invalidate();
-			System.out.println("ausgeloggt");
-			
-			try {
-				request.setAttribute("navtype", "notSignedIn");
-				request.setAttribute("pagetitle", "Bitte Einloggen");
-				request.getRequestDispatcher("/templates/index.ftl").forward(request, response);
-			} catch (ServletException | IOException e) {
-				request.setAttribute("errormessage", "Template error: please contact the administrator");
-				e.printStackTrace();
-			}
-			
-			return false;
-		}
-		else {
-			System.out.println((String) request.getSession(false).getAttribute("userid"));
-			request.setAttribute("navtype", "signedIn");
-			return true;
 		}
 	}
 }
