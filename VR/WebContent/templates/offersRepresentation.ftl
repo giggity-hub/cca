@@ -11,7 +11,7 @@
 	</tr>
 	<#list availableOffers as ho>
 	<tr>
-		<td><a href="guestgui?action=selectHolidayOffer&amp;hid=${ho.id}" title="Make Booking">${ho.id}</a></td>
+		<td><a href="guestgui?action=selectAppointment&amp;aid=${inv.aid}" title="selectAppointment">${ho.id}</a></td>
 		<td>${ho.addressData.street}</td>
 		<td>${ho.addressData.town}</td>
 		<td>${ho.capacity}</td>

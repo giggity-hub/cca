@@ -9,14 +9,15 @@ import java.util.Map;
 
 public class Appointment {
 	public int aid;
-	int groupId;
-	String description;
-	String name;
-	String location;
-	int duration;
-	Date deadline;
+	public int groupId;
+	public String description;
+	public String name;
+	public String location;
+	public int duration;
+	public Date deadline;
 	public Boolean isFinal;
 	public ArrayList<PossibleDate> possibleDates;
+	
 	
 	public Appointment(int aid, int groupId, String description, String name, String location, int duration, 
 			Date deadline, Boolean finalized) {
@@ -92,5 +93,73 @@ public class Appointment {
 		this.isFinal = true;
 		return finalDate;
 		
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAid() {
+		return aid;
+	}
+
+	public void setAid(int aid) {
+		this.aid = aid;
+	}
+
+	public int getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+
+	public Boolean getIsFinal() {
+		return isFinal;
+	}
+
+	public void setIsFinal(Boolean isFinal) {
+		this.isFinal = isFinal;
+	}
+
+	public ArrayList<PossibleDate> getPossibleDates() {
+		return possibleDates;
 	}
 }

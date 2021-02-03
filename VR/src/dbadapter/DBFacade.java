@@ -56,7 +56,30 @@ public class DBFacade implements IHolidayOffer {
 	public static void setInstance(DBFacade dbfacade) {
 		instance = dbfacade;
 	}
-
+	
+	public void replyingToAppointment(int userId, int aid, ArrayList<Date> pds ) {
+		
+	}
+	
+	public ArrayList<Appointment> getInvitations(int userId, int groupId){
+		ArrayList<Appointment> apts = new ArrayList<Appointment>();
+		
+		apts.add(new Appointment(88, 88, "description1", "name1", "loc", 500, Date.valueOf("2020-02-02"), false));
+		apts.add(new Appointment(89, 88, "description1", "name2", "loc", 500, Date.valueOf("2020-02-02"), false));
+		apts.add(new Appointment(90, 88, "description1", "name3", "loc", 500, Date.valueOf("2020-02-02"), false));
+		
+		return apts;
+	}
+	
+	public ArrayList<String> getPossibleDates(int aid){
+		ArrayList<String> pds = new ArrayList<String>();
+		pds.add(Date.valueOf("2020-02-02").toString());
+		pds.add(Date.valueOf("2020-02-03").toString());
+		pds.add(Date.valueOf("2020-02-04").toString());
+		return pds;
+//		return 
+	}
+	
 	
 	public void creatingAppointment(int creator, Date[] dates, int[] participants, String description, String name,
 			String location, int duration, Date deadline, int groupId) {

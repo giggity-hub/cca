@@ -28,7 +28,6 @@ import dbadapter.DBFacade;
  */
 
 
-
 public class Add extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -104,7 +103,9 @@ public class Add extends HttpServlet {
 
 
 				//call the CCA singleton to post the appontment
+
 				CCApplication.getInstance().createAppointment(creator, dates, participants, description, name, location, duration, deadline, groupID);
+
 			}
 			catch(Exception e) {
 				System.out.println(e.getMessage());

@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import application.CCApplication;
+import datatypes.Appointment;
 import datatypes.GuestData;
+import dbadapter.DBFacade;
 import dbadapter.HolidayOffer;
 
 /**
@@ -36,6 +40,11 @@ public class GuestGUI extends HttpServlet {
 		// Case: Request booking form
 		if (action.equals("selectHolidayOffer")) {
 			// Set request attributes
+			
+			
+			
+			
+			
 			request.setAttribute("pagetitle", "Book Offer");
 			request.setAttribute("hid", request.getParameter("hid"));
 
@@ -47,7 +56,8 @@ public class GuestGUI extends HttpServlet {
 			}
 			// Otherwise show search form
 		} else {
-
+			
+			
 			// Set request attributes
 			request.setAttribute("pagetitle", "Search Offers");
 
