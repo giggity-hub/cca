@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class Appointment {
 	public int aid;
-	int groupId;
-	String description;
-	String name;
-	String location;
-	int duration;
-	Date deadline;
+	public int groupId;
+	public String description;
+	public String name;
+	public String location;
+	public int duration;
+	public Date deadline;
 	public Boolean isFinal;
 	public ArrayList<PossibleDate> possibleDates;
 	
