@@ -88,7 +88,6 @@ public class Add extends HttpServlet {
 				}
 				
 				int creator = 69;
-				int groupId = 420;
 				
 				int[] participants = participantArrayFromString(request.getParameter("participants"));
 				String description = (String)request.getParameter("description");
@@ -97,10 +96,13 @@ public class Add extends HttpServlet {
 				int duration = Integer.parseInt(request.getParameter("duration"));
 				Date deadline = Date.valueOf((String) request.getParameter("deadline"));
 				
+				int groupID = Integer.parseInt(request.getParameter("groudID"));
 
 
 				//call the CCA singleton to post the appontment
-				DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
+
+				CCApplication.getInstance().createAppointment(creator, dates, participants, description, name, location, duration, deadline, groupID);
+
 			}
 			catch(Exception e) {
 				System.out.println(e.getMessage());

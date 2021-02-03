@@ -18,6 +18,10 @@
 			<td><input type="text" name="participants"/></td>
 		</tr>
 		<tr>
+			<td>Group ID</td>
+			<td><input type="text" name="groupID"/></td>
+		</tr>
+		<tr>
 			<td>Dates</td>
 			<td>
 				<input type="hidden" id="numOfDates" name="numOfDates" value ="1">
