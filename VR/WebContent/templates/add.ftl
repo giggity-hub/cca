@@ -55,6 +55,7 @@
 	</br>
 	<button type="submit" id="addAppointment" name="addAppointment" value="Submit">Submit!</button>
 </form>
+<br>
 </div>
 </div>
 

@@ -16,7 +16,7 @@
 	</tr>
 	<#list appointments as apt>
 	<tr style="background-color:<#if apt.isFinal>lightgreen<#else>lightcoral</#if>">
-		<td><a href="reply?action=selectApointment&amp;aid=${apt.aid}" title="Make Booking">${apt.name}</a></td>
+		<td><#if !apt.isFinal><a href="reply?action=selectAppointment&amp;aid=${apt.aid}" title="Make Booking"></#if>${apt.name}<#if !apt.isFinal></a></#if></td>
 		<td>${apt.description}</td>
 		<td>${apt.location}</td>
 		<td>${apt.duration}</td>
@@ -30,4 +30,5 @@
 	</#list>
 </table>
 </#if>
+<br>
 <#include "footer.ftl">
