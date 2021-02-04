@@ -99,7 +99,7 @@ public class Add extends HttpServlet {
 					request.getParameter("numOfDates").isBlank()) {
 				try {
 					request.setAttribute("pagetitle", "Alles kaputt");
-					request.setAttribute("message", "<h1>Du hast alles kaputt gemacht!</h1><br> Anfrage unvollständig");
+					request.setAttribute("message", "<h1>Du hast alles kaputt gemacht!</h1><br> Anfrage unvollstï¿½ndig");
 					request.getRequestDispatcher("/templates/failInfoRepresentation.ftl").forward(
 							request, response);
 				} catch (ServletException | IOException e) {
@@ -107,7 +107,7 @@ public class Add extends HttpServlet {
 							"Template error: please contact the administrator");
 					e.printStackTrace();
 				}
-				System.out.println("Anfrage unvollständig");
+				System.out.println("Anfrage unvollstï¿½ndig");
 				return;
 			}
 			try {
@@ -117,7 +117,7 @@ public class Add extends HttpServlet {
 					dates[i]= Date.valueOf((String) request.getParameter("date"+(i + 1)));
 				}
 				
-				int creator = 69;
+				int creator = SessionHelper.getUserId(request);
 				
 				int[] participants = participantArrayFromString(request.getParameter("participants"));
 				String description = (String)request.getParameter("description");
@@ -144,7 +144,7 @@ public class Add extends HttpServlet {
 		
 		try {
 			request.setAttribute("pagetitle", "Super!");
-			request.setAttribute("message", "Termin Erfolgreich hinzugefügt");
+			request.setAttribute("message", "Termin Erfolgreich hinzugefï¿½gt");
 			request.getRequestDispatcher("/templates/okRepresentation.ftl").forward(
 					request, response);
 		} catch (ServletException | IOException e) {

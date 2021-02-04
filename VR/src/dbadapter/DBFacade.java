@@ -57,18 +57,37 @@ public class DBFacade implements IHolidayOffer {
 		DBFacade.instance = instance;
 	}
 	
-	public void replyingToAppointment(int userId, int aid, ArrayList<Date> pds ) {
+	public void replyingToAppointment(int mid, int aid, ArrayList<Date> pds ) {
+		String insertPossibleDate = "INSERT INTO possibleDates (aid, mid, date) VALUES (?, ?, ?)";
+		
+		
+		try (Connection connection = DriverManager
+				.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+			try (PreparedStatement psInsert = connection.prepareStatement(insertPossibleDate)) {
+				
+				for (Date date: pds) {
+					psInsert.setInt(1, aid);
+					psInsert.setInt(2, mid);
+					psInsert.setDate(3, date);
+					psInsert.executeUpdate();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 	
 	public ArrayList<Appointment> getInvitations(int userId, int groupId){
-
 		
-//		apts.add(new Appointment(88, 88, "description1", "name1", "loc", 500, Date.valueOf("2020-02-02"), false));
-//		apts.add(new Appointment(89, 88, "description1", "name2", "loc", 500, Date.valueOf("2020-02-02"), false));
-//		apts.add(new Appointment(90, 88, "description1", "name3", "loc", 500, Date.valueOf("2020-02-02"), false));
-		String selectAppointments = "SELECT aid FROM appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?)";
-		String selectNotReplied = "SELECT * FROM appointments WHERE NOT EXISTS (SELECT 1 FROM possibledates WHERE aid=? AND mid=?)";
+		String selectInvitations = "SELECT * FROM appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?) AND aid NOT IN (SELECT aid FROM possibledates WHERE mid=? )";
+//		String selectAppointments = "SELECT aid FROM appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?)";
+//		String selectNotReplied = "SELECT * FROM appointments WHERE NOT EXISTS (SELECT 1 FROM possibledates WHERE aid=? AND mid=?)";
 		ArrayList<Appointment> apts = new ArrayList<Appointment>();
 		
 		try (Connection connection = DriverManager
@@ -76,24 +95,15 @@ public class DBFacade implements IHolidayOffer {
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psSelectApts = connection.prepareStatement(selectAppointments);
-					PreparedStatement psSelectNoReply = connection.prepareStatement(selectNotReplied)) {
-				psSelectApts.setInt(1, userId);
-
-				try(ResultSet rsapts = psSelectApts.executeQuery()){
-					while(rsapts.next()) {
-						psSelectNoReply.setInt(1, rsapts.getInt(1));
-		
-						psSelectNoReply.setInt(2, userId);
-						ResultSet rs = psSelectNoReply.executeQuery();
-						System.out.println("yeah boi dis 1 appointment");
-						System.out.println(rsapts.getInt(1));
-						if(rs.next()) {
-							apts.add(new Appointment(rs));
-						}
-						
-					}
+			try (PreparedStatement psSelect = connection.prepareStatement(selectInvitations)) {
+				psSelect.setInt(1, userId);
+				psSelect.setInt(2, userId);
+				ResultSet rs = psSelect.executeQuery();
+				
+				while(rs.next()) {
+					apts.add(new Appointment(rs));	
 				}
+	
 
 			}
 		} catch (Exception e) {
@@ -105,10 +115,28 @@ public class DBFacade implements IHolidayOffer {
 	}
 	
 	public ArrayList<String> getPossibleDates(int aid){
+		
+		String selectPossibleDates = "SELECT DISTINCT date FROM possibleDates WHERE aid=?";
 		ArrayList<String> pds = new ArrayList<String>();
-		pds.add(Date.valueOf("2020-02-02").toString());
-		pds.add(Date.valueOf("2020-02-03").toString());
-		pds.add(Date.valueOf("2020-02-04").toString());
+		
+		try (Connection connection = DriverManager
+				.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+			try (PreparedStatement psSelect = connection.prepareStatement(selectPossibleDates)) {
+				psSelect.setInt(1, aid);
+				ResultSet rs = psSelect.executeQuery();
+				
+				while(rs.next()) {
+					pds.add(rs.getDate(1).toString());
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return pds;
 	}
 	
