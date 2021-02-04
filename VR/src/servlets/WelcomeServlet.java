@@ -24,7 +24,7 @@ public class WelcomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 	
-		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((String) request.getSession(false).getAttribute("userid")).isBlank()) {
+		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((int) request.getSession(false).getAttribute("userid")) < 0) {
 			request.setAttribute("navtype", "notSignedIn");
 			request.setAttribute("pagetitle", "Bitte Einloggen");
 		} 
@@ -57,7 +57,12 @@ public class WelcomeServlet extends HttpServlet {
 			if (request.getParameter("userid") != null) {
 				if(request.getSession(false) != null)
 					request.getSession(false).invalidate();
-				request.getSession(true).setAttribute("userid", request.getParameter("userid"));
+				try {
+					request.getSession(true).setAttribute("userid", Integer.parseInt(request.getParameter("userid")));
+				}
+				catch(Exception e){
+					System.out.println("Userid muss int sein");
+				}
 			}
 		}
 		

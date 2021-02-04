@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionHelper {
 	
 	public static boolean validate(HttpServletRequest request, HttpServletResponse response) {
-		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((String)request.getSession(false).getAttribute("userid")).isBlank()) {
+		if (request.getSession(false) == null || request.getSession(false).getAttribute("userid") == null || ((int)request.getSession(false).getAttribute("userid")) < 0) {
 			try {
 				request.setAttribute("navtype", "notSignedIn");
 				request.setAttribute("pagetitle", "Bitte Einloggen");
@@ -45,7 +45,7 @@ public class SessionHelper {
 	
 	public static int getUserId(HttpServletRequest request) {
 		try {
-			return Integer.parseInt((String) request.getSession(false).getAttribute("userid"));
+			return Integer.parseInt("" + request.getSession(false).getAttribute("userid"));
 		} catch (Exception e) {
 			System.out.println("Die Session ist kaputt :(");
 			request.getSession().invalidate();
