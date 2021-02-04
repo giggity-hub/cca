@@ -48,7 +48,7 @@ public class Reply extends HttpServlet {
 			
 			// Dispatch request to template engine
 			try {
-				int userId = 69;
+				int userId = SessionHelper.getUserId(request);
 				int groupId = 420;
 				ArrayList<Appointment> invitations = DBFacade.getInstance().getInvitations(userId, groupId);
 				

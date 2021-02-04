@@ -67,8 +67,8 @@ public class DBFacade implements IHolidayOffer {
 //		apts.add(new Appointment(88, 88, "description1", "name1", "loc", 500, Date.valueOf("2020-02-02"), false));
 //		apts.add(new Appointment(89, 88, "description1", "name2", "loc", 500, Date.valueOf("2020-02-02"), false));
 //		apts.add(new Appointment(90, 88, "description1", "name3", "loc", 500, Date.valueOf("2020-02-02"), false));
-		String selectInvitations = "SELECT * FROM Appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?)"
-				+ "AND aid NOT IN (SELECT aid FROM possibleDates WHERE mid=?)";
+		String selectAppointments = "SELECT aid FROM appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?)";
+		String selectNotReplied = "SELECT * FROM appointments WHERE NOT EXISTS (SELECT 1 FROM possibledates WHERE aid=? AND mid=?)";
 		ArrayList<Appointment> apts = new ArrayList<Appointment>();
 		
 		try (Connection connection = DriverManager
@@ -76,13 +76,22 @@ public class DBFacade implements IHolidayOffer {
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psSelect = connection.prepareStatement(selectInvitations)) {
-				psSelect.setInt(1, userId);
-				psSelect.setInt(2, userId);
-				try(ResultSet rs = psSelect.executeQuery()){
-					
-					while(rs.next()) {
-						apts.add(new Appointment(rs));
+			try (PreparedStatement psSelectApts = connection.prepareStatement(selectAppointments);
+					PreparedStatement psSelectNoReply = connection.prepareStatement(selectNotReplied)) {
+				psSelectApts.setInt(1, userId);
+
+				try(ResultSet rsapts = psSelectApts.executeQuery()){
+					while(rsapts.next()) {
+						psSelectNoReply.setInt(1, rsapts.getInt(1));
+		
+						psSelectNoReply.setInt(2, userId);
+						ResultSet rs = psSelectNoReply.executeQuery();
+						System.out.println("yeah boi dis 1 appointment");
+						System.out.println(rsapts.getInt(1));
+						if(rs.next()) {
+							apts.add(new Appointment(rs));
+						}
+						
 					}
 				}
 
