@@ -3,7 +3,9 @@
 <h1>invitations.ftl</h1>
 
 
-
+<#if invitations?size == 0>
+	Keine neuen Invitations
+</#if>
  
 <#list invitations as inv>
 

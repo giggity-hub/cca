@@ -102,8 +102,7 @@ public class Reply extends HttpServlet {
 				DBFacade.getInstance().replyingToAppointment(mid, aid, possibleDates);
 				
 				request.setAttribute("pagetitle", "Reply successfull");
-				request.setAttribute("message",
-						"Wow du hast 1 reply geschickt. Fühlst du dich jtz cool oder was?");
+				request.setAttribute("message","Deine Reply wurde gespeichert");
 
 				// Dispatch to template engine
 				try {
@@ -115,8 +114,7 @@ public class Reply extends HttpServlet {
 				
 			}else {
 				request.setAttribute("pagetitle", "Reply failed");
-				request.setAttribute("message",
-						"Du dumme Miesgebuaht. hast du nicht einen freien tag?");
+				request.setAttribute("message","Es muss mindestens ein possible Date oder ein alternative Date angegeben werden");
 
 				try {
 					request.getRequestDispatcher("/templates/failInfoRepresentation.ftl").forward(request,

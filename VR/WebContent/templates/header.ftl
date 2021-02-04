@@ -55,7 +55,7 @@
 <body class="d-flex flex-column">
 <div id="page-content"> 
  
- <nav class="navbar navbar-expand navbar-dark bg-dark px-3">
+ <nav class="navbar navbar-expand navbar-dark bg-dark px-3 mb-5">
   <div class="collapse navbar-collapse" id="navbarNav">
   <#if navtype == "signedIn">
     <ul class="navbar-nav">
