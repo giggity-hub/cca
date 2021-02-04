@@ -31,12 +31,10 @@ public class WelcomeServlet extends HttpServlet {
 		else if (request.getParameter("action") != null && request.getParameter("action").equals("logOut")) {
 			if (request.getSession(false) != null)
 				request.getSession(false).invalidate();
-			System.out.println("ausgeloggt");
 			request.setAttribute("navtype", "notSignedIn");
 			request.setAttribute("pagetitle", "Bitte Einloggen");
 		} 
 		else {
-			System.out.println((String) request.getSession(false).getAttribute("userid"));
 			request.setAttribute("navtype", "signedIn");
 			request.setAttribute("pagetitle", "Wilkommen");
 		}
@@ -60,7 +58,6 @@ public class WelcomeServlet extends HttpServlet {
 				if(request.getSession(false) != null)
 					request.getSession(false).invalidate();
 				request.getSession(true).setAttribute("userid", request.getParameter("userid"));
-				System.out.println("neue Session created");
 			}
 		}
 		

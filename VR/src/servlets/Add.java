@@ -69,20 +69,47 @@ public class Add extends HttpServlet {
 			return;
 		
 		if (request.getParameter("action").equals("addAppointment")) {
-//			System.out.println("Registered Post request with action=addAppointment");
 			
-			if(request.getParameter("participants")==null || 
-					request.getParameter("description")==null ||
-					request.getParameter("name")==null ||
-					request.getParameter("location")==null ||
-					request.getParameter("duration")==null ||
-					request.getParameter("date1")==null ||
-					request.getParameter("numOfDates")==null) {
-				//todo: forward to errorpage
+			if(request.getParameter("participants") == null || 
+					request.getParameter("description") == null ||
+					request.getParameter("name") == null ||
+					request.getParameter("location") == null ||
+					request.getParameter("duration") == null ||
+					request.getParameter("date1") == null ||
+					request.getParameter("numOfDates") == null) {
+				try {
+					request.setAttribute("pagetitle", "Alles kaputt");
+					request.setAttribute("message", "Alles kaputt! Anfrage falsch. Irgendwas war null");
+					request.getRequestDispatcher("/templates/failInfoRepresentation.ftl").forward(
+							request, response);
+				} catch (ServletException | IOException e) {
+					request.setAttribute("errormessage",
+							"Template error: please contact the administrator");
+					e.printStackTrace();
+				}
 				System.out.println("Anfrage falsch");
 				return;
 			}
-			System.out.println("Anfrage korrekt");
+			if(request.getParameter("participants").isBlank() || 
+					request.getParameter("description").isBlank() ||
+					request.getParameter("name").isBlank() ||
+					request.getParameter("location").isBlank() ||
+					request.getParameter("duration").isBlank() ||
+					request.getParameter("date1").isBlank() ||
+					request.getParameter("numOfDates").isBlank()) {
+				try {
+					request.setAttribute("pagetitle", "Alles kaputt");
+					request.setAttribute("message", "<h1>Du hast alles kaputt gemacht!</h1><br> Anfrage unvollständig");
+					request.getRequestDispatcher("/templates/failInfoRepresentation.ftl").forward(
+							request, response);
+				} catch (ServletException | IOException e) {
+					request.setAttribute("errormessage",
+							"Template error: please contact the administrator");
+					e.printStackTrace();
+				}
+				System.out.println("Anfrage unvollständig");
+				return;
+			}
 			try {
 				int numOfDates = Integer.parseInt(request.getParameter("numOfDates"));
 				Date[] dates = new Date[numOfDates];
