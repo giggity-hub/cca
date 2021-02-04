@@ -1,20 +1,13 @@
-div#wrapper {
-	margin: 0px auto;
-	width: 100%;
-	height: 100%;
-	vertical-align: top;
-	background-color: #ffffff;
+html,
+body {
+  height: 100%;
 }
 
-div#content {
-	width: 90%;
-	margin: auto;
-	background-color: #ffffff;
+#page-content {
+  flex: 1 0 auto;
 }
-#navbarNav{
-	width: 90%;
-	margin: auto;
+
+#sticky-footer {
+  flex-shrink: none;
 }
-tr{
-	border-bottom: 1pt solid grey;
-}
+
