@@ -30,7 +30,7 @@ public class Reply extends HttpServlet {
 		// selectAppointment -> addPossibleDate
 		if (action.equals("selectAppointment")) {
 
-			request.setAttribute("pagetitle", "Book Offer");
+			request.setAttribute("pagetitle", "Select Apponitment");
 
 			int aid = Integer.parseInt(request.getParameter("aid"));
 			ArrayList<String> possibleDates = DBFacade.getInstance().getPossibleDates(aid);
@@ -98,8 +98,8 @@ public class Reply extends HttpServlet {
 			System.out.println("amount of dates: " + possibleDates.size());
 			if (possibleDates.size() > 0) {
 				// Set request attributes
-//				int uid = 69;
-//				DBFacade.getInstance().replyingToAppointment(uid, aid, possibleDates);
+				int mid = SessionHelper.getUserId(request);
+				DBFacade.getInstance().replyingToAppointment(mid, aid, possibleDates);
 				
 				request.setAttribute("pagetitle", "Reply successfull");
 				request.setAttribute("message",
