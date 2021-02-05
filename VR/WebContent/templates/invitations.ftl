@@ -16,17 +16,7 @@
 	  		<p class="card-text">${inv.description}</p>
 			<a class="btn btn-primary" href="reply?action=selectAppointment&amp;aid=${inv.aid}" title="selectAppointment">Reply</a>
   		</div>
-
-
-
-
 	</div>
-
-
-	
 </#list>
-
-
-
-
+<br>
 <#include "footer.ftl">

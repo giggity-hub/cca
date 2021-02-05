@@ -61,7 +61,7 @@ public class VRApplication implements GCmds, SMCmds {
 			time = date2.getTime();
 			Timestamp departureTimeSQL = new Timestamp(time);
 			int personsSQL = Integer.parseInt(persons);
-			result = DBFacade.getInstance().getAvailableHolidayOffers(arrivalTimeSQL, departureTimeSQL, personsSQL);
+			//result = DBFacade.getInstance().getAvailableHolidayOffers(arrivalTimeSQL, departureTimeSQL, personsSQL);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,7 +91,7 @@ public class VRApplication implements GCmds, SMCmds {
 			Timestamp endTimeSQL = new Timestamp(time);
 			int capacitySQL = Integer.parseInt(capacity);
 			double feeSQL = Double.parseDouble(fee);
-			DBFacade.getInstance().insertOffer(startTimeSQL, endTimeSQL, addressData, capacitySQL, feeSQL);
+			//DBFacade.getInstance().insertOffer(startTimeSQL, endTimeSQL, addressData, capacitySQL, feeSQL);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,8 +129,8 @@ public class VRApplication implements GCmds, SMCmds {
 			Timestamp departureTimeSQL = new Timestamp(time2);
 			int hidSQL = Integer.parseInt(hid);
 			int personsSQL = Integer.parseInt(persons);
-			okfail = DBFacade.getInstance().bookingHolidayOffer(arrivalTimeSQL, departureTimeSQL, hidSQL, guestData,
-					personsSQL);
+			//okfail = DBFacade.getInstance().bookingHolidayOffer(arrivalTimeSQL, departureTimeSQL, hidSQL, guestData,
+				//	personsSQL);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -141,7 +141,7 @@ public class VRApplication implements GCmds, SMCmds {
 	 * Initiates deleting of all bookings not paid and older than 14 days.
 	 */
 	public void checkPayment() {
-		DBFacade.getInstance().setAvailableHolidayOffer();
+		//DBFacade.getInstance().setAvailableHolidayOffer();
 	}
 
 	/**
@@ -151,6 +151,6 @@ public class VRApplication implements GCmds, SMCmds {
 	 * @return
 	 */
 	private boolean preOfferAvailable(int hid) {
-		return DBFacade.getInstance().checkHolidayOfferById(hid);
+		return false;//DBFacade.getInstance().checkHolidayOfferById(hid);
 	}
 }

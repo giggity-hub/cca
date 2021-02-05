@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import application.CCApplication;
 import datatypes.Appointment;
 import datatypes.PossibleDate;
 import dbadapter.DBFacade;
@@ -22,23 +23,34 @@ public class Reply extends HttpServlet {
 		
 		if(!SessionHelper.validate(request,response))return;
 
-
-
 		// Catch error if there is no page contained in the request
 		String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
 
 		// selectAppointment -> addPossibleDate
 		if (action.equals("selectAppointment")) {
-
 			request.setAttribute("pagetitle", "Select Apponitment");
 
 			int aid = Integer.parseInt(request.getParameter("aid"));
-			ArrayList<String> possibleDates = DBFacade.getInstance().getPossibleDates(aid);
+			ArrayList<PossibleDate> possibleDates = CCApplication.getInstance().getPossibleDates(aid);
+			ArrayList<PossibleDate> replyedDates = CCApplication.getInstance().getReplyedDatesNotFinal(aid, SessionHelper.getUserId(request));
+			boolean[] isMarked = new boolean[possibleDates.size()];
+			if (possibleDates != null && replyedDates != null && replyedDates.size() != 0) {
+				for (int i = 0; i < isMarked.length; i++) {
+					for (int j = 0; j < replyedDates.size(); j++) {
+						if(replyedDates.get(j).getDate().equals(possibleDates.get(i).getDate())) {
+							isMarked[i] = true;
+							replyedDates.remove(j);
+							break;
+						}
+					}
+				}
+			}
 			
 
 			try {
 				request.setAttribute("aid", aid);
 				request.setAttribute("possibleDates", possibleDates);
+				request.setAttribute("isMarked", isMarked);
 				request.getRequestDispatcher("/templates/addPossibleDate.ftl").forward(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -49,17 +61,13 @@ public class Reply extends HttpServlet {
 			try {
 				int userId = SessionHelper.getUserId(request);
 				int groupId = 420;
-				ArrayList<Appointment> invitations = DBFacade.getInstance().getInvitations(userId, groupId);
+				ArrayList<Appointment> appointments = CCApplication.getInstance().getReplyedNotFinal(userId);
 				
-				
-//				System.out.println(invitations.get(0).name);
-//				System.out.println(invitations.get(1).name);
-//				System.out.println(invitations.get(2).name);
 				// Set request attributes
 				request.setAttribute("pagetitle", "Invitations");
-				request.setAttribute("invitations", invitations);
+				request.setAttribute("appointments", appointments);
 				
-				request.getRequestDispatcher("/templates/invitations.ftl").forward(request, response);
+				request.getRequestDispatcher("/templates/calendar.ftl").forward(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -71,35 +79,32 @@ public class Reply extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		if(!SessionHelper.validate(request,response))return;
+		if(!SessionHelper.validate(request,response)) return;
 		
 		if (request.getParameter("action").equals("postPossibleDates")) {
 			
-			
 			int aid = Integer.parseInt(request.getParameter("aid"));
-			ArrayList<String> dates = DBFacade.getInstance().getPossibleDates(aid);
+			int numofpd = Integer.parseInt(request.getParameter("size"));
+			ArrayList<Date> pds = new ArrayList<>();
 			
-			System.out.println(aid);
-			
-			ArrayList<Date> possibleDates = new ArrayList<Date>();
-			
-			for (String date: dates) {
-				if (request.getParameter(date) != null) {
-					possibleDates.add(Date.valueOf(date));
+			for (int i = 0; i < numofpd; i++) {
+				if (request.getParameter("pddate" + i) != null) {
+					String[] date = request.getParameter("pddate" + i).split("\\.");
+					pds.add(Date.valueOf(date[2] + "-" + date[1] + "-" + date[0]));
 				}
 			}
 			
 			int i = 1;
 			while(request.getParameter("date" + i) != null && request.getParameter("date" + i) != "" ) {
-				possibleDates.add(Date.valueOf(request.getParameter("date" + i)));
+				System.out.println(request.getParameter("date" + i));
+				pds.add((Date.valueOf(request.getParameter("date" + i))));
 				i++;
 			}
 			
-			System.out.println("amount of dates: " + possibleDates.size());
-			if (possibleDates.size() > 0) {
+			System.out.println("amount of dates: " + pds.size());
+			if (pds.size() > 0) {
 				// Set request attributes
-				int mid = SessionHelper.getUserId(request);
-				DBFacade.getInstance().replyingToAppointment(mid, aid, possibleDates);
+				CCApplication.getInstance().replyingToAppointment(aid, SessionHelper.getUserId(request), pds);
 				
 				request.setAttribute("pagetitle", "Reply successfull");
 				request.setAttribute("message","Deine Reply wurde gespeichert");

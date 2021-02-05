@@ -26,19 +26,8 @@ import interfaces.IHolidayOffer;
  * @author swe.uni-due.de
  *
  */
-public class DBFacade implements IHolidayOffer {
+public class DBFacade {
 	private static DBFacade instance;
-
-	/**
-	 * Constructor which loads the corresponding driver for the chosen database type
-	 */
-	private DBFacade() {
-		try {
-			Class.forName("com." + Configuration.getType() + ".jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Implementation of the Singleton pattern.
@@ -53,19 +42,37 @@ public class DBFacade implements IHolidayOffer {
 		return instance;
 	}
 	
+	/**
+	 * Constructor which loads the corresponding driver for the chosen database type
+	 */
+	private DBFacade() {
+		try {
+			Class.forName("com." + Configuration.getType() + ".jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void setInstance(DBFacade instance) {
 		DBFacade.instance = instance;
 	}
 	
-	public void replyingToAppointment(int mid, int aid, ArrayList<Date> pds ) {
+	public void replyingToAppointment(int aid, int mid, ArrayList<Date> pds ) {
+		String deletPrevious = "DELETE FROM possibleDates WHERE aid = ? AND mid = ?";
 		String insertPossibleDate = "INSERT INTO possibleDates (aid, mid, date) VALUES (?, ?, ?)";
 		
 		
-		try (Connection connection = DriverManager
-				.getConnection(
+		try (Connection connection = DriverManager.getConnection(
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
+			
+			try (PreparedStatement psDelete = connection.prepareStatement(deletPrevious)) {
+				psDelete.setInt(1, aid);
+				psDelete.setInt(2, mid);
+				psDelete.executeUpdate();
+			}
+			
 			try (PreparedStatement psInsert = connection.prepareStatement(insertPossibleDate)) {
 				
 				for (Date date: pds) {
@@ -82,64 +89,6 @@ public class DBFacade implements IHolidayOffer {
 		
 		
 	}
-	
-	public ArrayList<Appointment> getInvitations(int userId, int groupId){
-		
-		String selectInvitations = "SELECT * FROM appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?) AND aid NOT IN (SELECT aid FROM possibledates WHERE mid=? )";
-//		String selectAppointments = "SELECT aid FROM appointments WHERE aid IN (SELECT aid FROM participants WHERE mid=?)";
-//		String selectNotReplied = "SELECT * FROM appointments WHERE NOT EXISTS (SELECT 1 FROM possibledates WHERE aid=? AND mid=?)";
-		ArrayList<Appointment> apts = new ArrayList<Appointment>();
-		
-		try (Connection connection = DriverManager
-				.getConnection(
-						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
-								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
-						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psSelect = connection.prepareStatement(selectInvitations)) {
-				psSelect.setInt(1, userId);
-				psSelect.setInt(2, userId);
-				ResultSet rs = psSelect.executeQuery();
-				
-				while(rs.next()) {
-					apts.add(new Appointment(rs));	
-				}
-	
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return apts;
-	}
-	
-	public ArrayList<String> getPossibleDates(int aid){
-		
-		String selectPossibleDates = "SELECT DISTINCT date FROM possibleDates WHERE aid=?";
-		ArrayList<String> pds = new ArrayList<String>();
-		
-		try (Connection connection = DriverManager
-				.getConnection(
-						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
-								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
-						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psSelect = connection.prepareStatement(selectPossibleDates)) {
-				psSelect.setInt(1, aid);
-				ResultSet rs = psSelect.executeQuery();
-				
-				while(rs.next()) {
-					pds.add(rs.getDate(1).toString());
-				}
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return pds;
-	}
-	
 	
 	public void creatingAppointment(int creator, Date[] dates, int[] participants, String description, String name,
 			String location, int duration, Date deadline, int groupId) {
@@ -268,36 +217,25 @@ public class DBFacade implements IHolidayOffer {
 		}
 	}
 	
-	public Appointment[] getCalendar(int userId) {
+	public ArrayList<Appointment> getAppointmentsWithPossibleDates(int userId) {
 
-		String selapt = "SELECT * FROM Appointments WHERE aid in (SELECT aid FROM Participants WHERE mid = ?)";
-		String selpd = "SELECT * FROM PossibleDates WHERE aid = ? GROUP BY date";
-		Appointment[] res = null;
+		String sel = "SELECT * FROM Appointments WHERE aid in (SELECT aid FROM Participants WHERE mid = ?)";
+		ArrayList<Appointment> res = null;
 
 		try (Connection connection = DriverManager.getConnection(
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
 
-			try (PreparedStatement psapt = connection.prepareStatement(selapt);
-					PreparedStatement pspd = connection.prepareStatement(selpd)) {
+			try (PreparedStatement psapt = connection.prepareStatement(sel)){
 				psapt.setInt(1, userId);
 
 				try (ResultSet rs = psapt.executeQuery()) {
-					int length = 0;
-					if (rs.last()) {
-						length = rs.getRow();
-						rs.beforeFirst();
-					}
-					res = new Appointment[length];
+					res = new ArrayList<>();
 
-					for (int i = 0; i < length && rs.next(); i++) {
-
-						pspd.setInt(1, rs.getInt("aid"));
-
-						try (ResultSet rspd = pspd.executeQuery()) {
-							res[i] = new Appointment(rs, rspd);
-						}
+					for (int i = 0; rs.next(); i++) {
+						res.add(new Appointment(rs));
+						res.get(i).setPossibleDates(getPossibleDates(rs.getInt("aid")));
 					}
 				}
 			}
@@ -309,271 +247,85 @@ public class DBFacade implements IHolidayOffer {
 
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/**
-	 * Function that returns all appropriate offers from the database.
-	 * 
-	 * @param arrivalTime   compared with existing bookings and start time.
-	 * @param departureTime compared with existing bookings and start time.
-	 * @param persons       compared with capacity.
-	 * @return Arraylist of all offer objects.
-	 */
-	public ArrayList<HolidayOffer> getAvailableHolidayOffers(Timestamp arrivalTime, Timestamp departureTime,
-			int persons) {
-		ArrayList<HolidayOffer> result = new ArrayList<HolidayOffer>();
+	public ArrayList<Appointment> getAppointmentsWithReplyedDates(int userid, boolean withFinalDates) {
 
-		// Declare the necessary SQL queries.
-		String sqlSelect = "SELECT * FROM HolidayOffer WHERE starttime <= ? AND endtime >= ? AND capacity >= ?";
-		String sqlSelectB = "SELECT * FROM Booking WHERE hid = ?";
+		String sel = "SELECT * FROM Appointments WHERE aid in (SELECT aid FROM Participants WHERE mid = ?)";
+		sel += withFinalDates ? "" : " AND isFinal = 0";
+		ArrayList<Appointment> res = null;
 
-		// Query all offers that fits to the given criteria.
-		try (Connection connection = DriverManager
-				.getConnection(
+		try (Connection connection = DriverManager.getConnection(
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
 
-			try (PreparedStatement ps = connection.prepareStatement(sqlSelect);
-					PreparedStatement psSelectB = connection.prepareStatement(sqlSelectB)) {
-				ps.setTimestamp(1, arrivalTime);
-				ps.setTimestamp(2, departureTime);
-				ps.setInt(3, persons);
+			try (PreparedStatement psapt = connection.prepareStatement(sel)){
+				psapt.setInt(1, userid);
 
-				try (ResultSet rs = ps.executeQuery()) {
-					while (rs.next()) {
-						HolidayOffer temp = new HolidayOffer(rs.getInt(1), rs.getTimestamp(2), rs.getTimestamp(3),
-								new AddressData(rs.getString(4), rs.getString(5)), rs.getInt(6), rs.getDouble(7));
-						psSelectB.setInt(1, temp.getId());
+				try (ResultSet rs = psapt.executeQuery()) {
+					res = new ArrayList<>();
 
-						// Query all bookings for the offer to check if its
-						// available.
-						try (ResultSet brs = psSelectB.executeQuery()) {
-							ArrayList<Booking> bookings = new ArrayList<Booking>();
-							while (brs.next()) {
-								bookings.add(new Booking(brs.getInt(1), brs.getTimestamp(2), brs.getTimestamp(3),
-										brs.getTimestamp(4), brs.getBoolean(5),
-										new GuestData(brs.getString(6), brs.getString(7)), brs.getDouble(8),
-										brs.getInt(9)));
-							}
-							temp.setBookings(bookings);
-						}
-						if (temp.available(arrivalTime, departureTime))
-							result.add(temp);
-					}
-					;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	/**
-	 * Inserts a new offer in the database.
-	 * 
-	 * @param startTime
-	 * @param endTime
-	 * @param address
-	 * @param capacity
-	 * @param fee
-	 */
-	public void insertOffer(Timestamp startTime, Timestamp endTime, AddressData address, int capacity, double fee) {
-
-		// Declare SQL query to insert offer.
-		String sqlInsert = "INSERT INTO HolidayOffer (startTime,endTime,street,town,capacity,fee) VALUES (?,?,?,?,?,?)";
-
-		// Insert offer into database.
-		try (Connection connection = DriverManager
-				.getConnection(
-						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
-								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
-						Configuration.getUser(), Configuration.getPassword())) {
-
-			try (PreparedStatement ps = connection.prepareStatement(sqlInsert)) {
-				ps.setTimestamp(1, startTime);
-				ps.setTimestamp(2, endTime);
-				ps.setString(3, address.getStreet());
-				ps.setString(4, address.getTown());
-				ps.setInt(5, capacity);
-				ps.setDouble(6, fee);
-				ps.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Inserts a booking into the database if there are enough capacities
-	 * 
-	 * @param arrivalTime
-	 * @param departureTime
-	 * @param hid
-	 * @param guestData
-	 * @param persons
-	 * @return new booking object if available or null if not available
-	 */
-	public Booking bookingHolidayOffer(Timestamp arrivalTime, Timestamp departureTime, int hid, GuestData guestData,
-			int persons) {
-		HolidayOffer ho = null;
-		ArrayList<Booking> bookings = new ArrayList<Booking>();
-		Booking booking = null;
-
-		// Declare necessary SQL queries.
-		String sqlSelectHO = "SELECT * FROM HolidayOffer WHERE id=?";
-		String sqlInsertBooking = "INSERT INTO Booking (creationDate,arrivalTime,departureTime,paid,name,email,price,hid) VALUES (?,?,?,?,?,?,?,?)";
-		String sqlSelectB = "SELECT * FROM Booking WHERE hid=?";
-
-		// Get selected offer
-		try (Connection connection = DriverManager
-				.getConnection(
-						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
-								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
-						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psSelect = connection.prepareStatement(sqlSelectHO);
-					PreparedStatement psSelectB = connection.prepareStatement(sqlSelectB);
-					PreparedStatement psInsert = connection.prepareStatement(sqlInsertBooking,
-							PreparedStatement.RETURN_GENERATED_KEYS)) {
-				psSelect.setInt(1, hid);
-				try (ResultSet hors = psSelect.executeQuery()) {
-					if (hors.next()) {
-						ho = new HolidayOffer(hors.getInt(1), hors.getTimestamp(2), hors.getTimestamp(3),
-								new AddressData(hors.getString(4), hors.getString(5)), hors.getInt(6),
-								hors.getDouble(7));
+					for (int i = 0; rs.next(); i++) {
+						res.add(new Appointment(rs));
+						res.get(i).setPossibleDates(getReplyedDates(rs.getInt("aid"), userid));
 					}
 				}
-
-				// Check if offer is still available
-				if (ho != null) {
-					psSelectB.setInt(1, hid);
-					try (ResultSet brs = psSelectB.executeQuery()) {
-						while (brs.next()) {
-							bookings.add(new Booking(brs.getInt(1), brs.getTimestamp(2), brs.getTimestamp(3),
-									brs.getTimestamp(4), brs.getBoolean(5),
-									new GuestData(brs.getString(6), brs.getString(7)), brs.getDouble(8),
-									brs.getInt(9)));
-						}
-						ho.setBookings(bookings);
-					}
-
-					// Insert new booking
-					if (ho.available(arrivalTime, departureTime) && ho.getCapacity() >= persons) {
-//						Timestamp creationDate = new Timestamp(new Date().getTime());
-//						booking = new Booking(0, new Timestamp(creationDate.getTime()), arrivalTime, departureTime,
-//								false, guestData, calculatePrice(arrivalTime, departureTime, ho.getFee()), ho.getId());
-//						psInsert.setTimestamp(1, booking.getCreationDate());
-//						psInsert.setTimestamp(2, booking.getArrivalTime());
-//						psInsert.setTimestamp(3, booking.getDepartureTime());
-//						psInsert.setBoolean(4, booking.isPaid());
-//						psInsert.setString(5, booking.getGuestData().getName());
-//						psInsert.setString(6, booking.getGuestData().getEmail());
-//						psInsert.setDouble(7, booking.getPrice());
-//						psInsert.setInt(8, booking.getHid());
-//						psInsert.executeUpdate();
-//						try (ResultSet generatedKeys = psInsert.getGeneratedKeys()) {
-//							if (generatedKeys.next()) {
-//								booking.setId(generatedKeys.getInt(1));
-//							}
-//						}
-
-					} else
-						ho = null;
-
-				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
+		return res;
 
-		return booking;
 	}
-
-	/**
-	 * Delete all bookings not paid and older than 14 days.
-	 */
-	public void setAvailableHolidayOffer() {
-
-		// Declare necessary SQL statement.
-		String deleteBO = "DELETE FROM Booking WHERE (paid=false) AND \"creationDate + 14 days < date\"";
-
-		// Update Database.
-		try (Connection connection = DriverManager
-				.getConnection(
+	
+	public ArrayList<PossibleDate> getPossibleDates(int aid) {
+		String sel = "SELECT * FROM PossibleDates WHERE aid = ? GROUP BY date";
+		ArrayList<PossibleDate> res = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psDelete = connection.prepareStatement(deleteBO)) {
-				psDelete.executeUpdate();
+
+			try (PreparedStatement ps = connection.prepareStatement(sel)) {
+				ps.setInt(1, aid);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()) {
+					res.add(new PossibleDate(rs));
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return res;
 	}
-
-	/**
-	 * Checks if offer with given id exists.
-	 * 
-	 * @param hid
-	 * @return
-	 */
-	public boolean checkHolidayOfferById(int hid) {
-
-		// Declare necessary SQL query.
-		String queryHO = "SELECT FROM HolidayOffer WHERE id=?";
-
-		// query data.
-		try (Connection connection = DriverManager
-				.getConnection(
+	
+	public ArrayList<PossibleDate> getReplyedDates(int aid, int userid) {
+		String sel = "SELECT * FROM PossibleDates WHERE aid = ? AND mid = ?";
+		ArrayList<PossibleDate> res = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(
 						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
 								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
 						Configuration.getUser(), Configuration.getPassword())) {
-			try (PreparedStatement psSelect = connection.prepareStatement(queryHO)) {
-				psSelect.setInt(1, hid);
-				try (ResultSet rs = psSelect.executeQuery()) {
-					return rs.next();
+
+			try (PreparedStatement ps = connection.prepareStatement(sel)) {
+				ps.setInt(1, aid);
+				ps.setInt(2, userid);
+				
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()) {
+					res.add(new PossibleDate(rs));
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return res;
 	}
 
-	/**
-	 * Function used to calculate the price for a booking.
-	 * 
-	 * @param date1 arrival date
-	 * @param date2 departure date
-	 * @param fee   price per night for the offer
-	 * @return
-	 */
-	private double calculatePrice(Timestamp date1, Timestamp date2, double fee) {
-		long dayDifference = (date2.getTime() - date1.getTime()) / 1000 / 60 / 60 / 24;
-
-		return dayDifference * fee;
-	}
 
 	
 }

@@ -1,29 +1,23 @@
 <#include "header.ftl">
 
-<h1>reply.ftl</h1>
-
-
-
-
+<h1>Zusagen oder Absagen</h1>
 
 <form method="POST" action="reply?action=postPossibleDates&amp;aid=${aid}">
 	<input type="hidden" name="size" value= ${possibleDates?size} >
 	
 	<h5>Possible Dates</h5>
 	<div class="form-group">
-	<#list possibleDates as pd>
+	<#list 0..possibleDates?size-1 as i>
 	
 		<div class="form-check">
-          <input class="form-check-input" type="checkbox" name="${pd}">
+          <input class="form-check-input" type="checkbox" name="pddate${i}" value="${possibleDates[i].date}" <#if isMarked[i]>checked</#if>>
           <label class="form-check-label" >
-            ${pd}
+            ${possibleDates[i].date}
           </label>
         </div>
-   
 	</#list>
+	
 	</div>
-	
-	
 	
 	<h5>Alternative Dates</h5>
 	<div class="form-group">

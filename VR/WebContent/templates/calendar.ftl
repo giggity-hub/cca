@@ -1,6 +1,6 @@
 <#include "header.ftl">
 
-<#if noAppointments>
+<#if appointments?size == 0>
 <h1>Keine Termine in der Datenbank</h1>
 <#else>
 <h1>Deine Termine</h1>

@@ -1,11 +1,14 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import application.CCApplication;
 import datatypes.Appointment;
 import dbadapter.DBFacade;
 
@@ -16,9 +19,8 @@ public class Calendar extends HttpServlet {
 		if(!SessionHelper.validate(request, response))
 			return;
 		
-		Appointment[] appointments = DBFacade.getInstance().getCalendar(SessionHelper.getUserId(request));
+		ArrayList<Appointment> appointments = CCApplication.getInstance().getCalendar(SessionHelper.getUserId(request));
 		
-		request.setAttribute("noAppointments", appointments == null || appointments.length == 0);
 		request.setAttribute("appointments", appointments);
 		request.setAttribute("pagetitle", "Calendar");
 		try {
