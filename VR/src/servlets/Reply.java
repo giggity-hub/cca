@@ -33,9 +33,11 @@ public class Reply extends HttpServlet {
 			int aid = Integer.parseInt(request.getParameter("aid"));
 			ArrayList<PossibleDate> possibleDates = CCApplication.getInstance().getPossibleDates(aid);
 			ArrayList<PossibleDate> replyedDates = CCApplication.getInstance().getReplyedDatesNotFinal(aid, SessionHelper.getUserId(request));
+			ArrayList<String> outDates = new ArrayList<>();
 			boolean[] isMarked = new boolean[possibleDates.size()];
 			if (possibleDates != null && replyedDates != null && replyedDates.size() != 0) {
 				for (int i = 0; i < isMarked.length; i++) {
+					outDates.add(possibleDates.get(i).getDate().toString());
 					for (int j = 0; j < replyedDates.size(); j++) {
 						if(replyedDates.get(j).getDate().equals(possibleDates.get(i).getDate())) {
 							isMarked[i] = true;
@@ -49,7 +51,7 @@ public class Reply extends HttpServlet {
 
 			try {
 				request.setAttribute("aid", aid);
-				request.setAttribute("possibleDates", possibleDates);
+				request.setAttribute("possibleDates", outDates);
 				request.setAttribute("isMarked", isMarked);
 				request.getRequestDispatcher("/templates/addPossibleDate.ftl").forward(request, response);
 			} catch (Exception e) {
@@ -89,8 +91,9 @@ public class Reply extends HttpServlet {
 			
 			for (int i = 0; i < numofpd; i++) {
 				if (request.getParameter("pddate" + i) != null) {
-					String[] date = request.getParameter("pddate" + i).split("\\.");
-					pds.add(Date.valueOf(date[2] + "-" + date[1] + "-" + date[0]));
+					/*String[] date = request.getParameter("pddate" + i).split("\\.");
+					pds.add(Date.valueOf(date[2] + "-" + date[1] + "-" + date[0]));*/
+					pds.add(Date.valueOf(request.getParameter("pddate" + i)));
 				}
 			}
 			

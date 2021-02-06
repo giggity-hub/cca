@@ -10,9 +10,9 @@
 	<#list 0..possibleDates?size-1 as i>
 	
 		<div class="form-check">
-          <input class="form-check-input" type="checkbox" name="pddate${i}" value="${possibleDates[i].date}" <#if isMarked[i]>checked</#if>>
+          <input class="form-check-input" type="checkbox" name="pddate${i}" value="${possibleDates[i]}" <#if isMarked[i]>checked</#if>>
           <label class="form-check-label" >
-            ${possibleDates[i].date}
+            ${possibleDates[i]}
           </label>
         </div>
 	</#list>
