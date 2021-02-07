@@ -74,7 +74,7 @@ public class Reply extends HttpServlet {
 				request.setAttribute("pagetitle", "Invitations");
 				request.setAttribute("appointments", appointments);
 				
-				request.getRequestDispatcher("/templates/calendar.ftl").forward(request, response);
+				request.getRequestDispatcher("/templates/invitations.ftl").forward(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -5,26 +5,42 @@
 <#else>
 <h1>Deine Termine</h1>
 </br>
-<table id="appointments" style="width:100%;">
-	<tr>
-		<th style="width:15%;">Name</th>
-		<th style="width:30%;">Beschreibung</th>
-		<th style="width:20%;">Ort</th>
-		<th style="width:10%;">Dauer</th>
-		<th style="width:15%;">Daten</th>
-		<th style="width:15%;">Deadline</th>
+<table id="appointments" class="table">
+	<thead>
+		<tr>
+		<th >Name</th>
+		<th >Beschreibung</th>
+		<th >Ort</th>
+		<th >Dauer</th>
+		<th >Daten</th>
+		<th>Deadline</th>
 	</tr>
+	</thead>
 	<#list appointments as apt>
-	<tr style="background-color:<#if apt.isFinal>lightgreen<#else>lightcoral</#if>">
-		<td><#if !apt.isFinal><a href="reply?action=selectAppointment&amp;aid=${apt.aid}" title="Make Booking"></#if>${apt.name}<#if !apt.isFinal></a></#if></td>
+	<tr class="">
+		<th>
+		${apt.name}
+		<#if apt.isFinal>
+			<span class="badge bg-success">Final</span>
+		<#else>
+			<span class="badge bg-secondary">Not Final</span>
+		</#if>
+		</th>
 		<td>${apt.description}</td>
 		<td>${apt.location}</td>
 		<td>${apt.duration}</td>
-		<td><table id="appointments">
-		<#list apt.possibleDates as pd>
-			<tr style="border-bottom:none; line-height:20pt"><td>${pd.date}</td></td>
-		</#list>
-		</table></td>
+		<td>
+		<ul class="list-group list-group-flush">
+			<#list apt.possibleDates as pd>
+				<li class="list-group-item">${pd.date}</li>
+			</#list>
+		</ul>
+		<#if !apt.isFinal>
+			<div class="d-grid gap-2">
+			<a href="reply?action=selectAppointment&amp;aid=${apt.aid}" title="Make Booking" class="btn btn-primary btn-sm">edit dates</a>
+			</div>
+		</#if>
+		</td>
 		<td>${apt.deadline}</td>
 	</tr>
 	</#list>
@@ -32,3 +48,4 @@
 </#if>
 <br>
 <#include "footer.ftl">
+
