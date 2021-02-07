@@ -106,7 +106,7 @@ public class AddWebTest extends TestCase {
 	}
 	@Test
 	public void testReplyToAppointment() {
-		tester.beginAt("add");
+		tester.beginAt("reply");
 		
 		//insert one Appointment into DB
 		int[] participants = {5};
@@ -118,22 +118,17 @@ public class AddWebTest extends TestCase {
 		tester.clickButton("signIn");
 		tester.gotoPage("reply");
 		
-		//confirm that the table is shown
-		tester.assertTextPresent("Name");
-		tester.assertTextPresent("Beschreibung");
-		tester.assertTextPresent("Ort");
-		tester.assertTextPresent("Dauer");
-		tester.assertTextPresent("Daten");
+		//confirm that the appointment is shown
 		tester.assertTextPresent("Deadline");
+		tester.assertTextPresent("Reply");
 		
 		//confirm that the details of the appointment are shown
 		tester.assertTextPresent("testDescription");
 		tester.assertTextPresent("testName");
-		tester.assertTextPresent("testLocation");
-		tester.assertTextPresent("1");
+
 		
 		//click on the link to navigate to the reply page
-		tester.clickLinkWithExactText("testName");
+		tester.clickLink("replyButton");
 		
 		//confirm that the reply form is shown
 		tester.assertFormPresent();
@@ -146,7 +141,7 @@ public class AddWebTest extends TestCase {
 		
 		//go to the form again
 		tester.gotoPage("reply");
-		tester.clickLinkWithExactText("testName");
+		tester.clickLink("replyButton");
 		
 		//now select one date as possible and submit again
 		tester.checkCheckbox("pddate0");
@@ -160,6 +155,8 @@ public class AddWebTest extends TestCase {
 		int[] participants = {5};
 		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
 		DBFacade.getInstance().creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
+		
+		tester.beginAt("calendar");
 		
 		//login and go to calendar
 		tester.setTextField("userid", "5");
