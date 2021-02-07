@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import dbadapter.Configuration;
 import dbadapter.DBFacade;
 import junit.framework.TestCase;
 import net.sourceforge.jwebunit.junit.WebTester;
@@ -15,7 +16,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 public class AddWebTest extends TestCase {
 	
@@ -29,18 +33,41 @@ public class AddWebTest extends TestCase {
 	public void setUp() throws Exception {
 		tester = new WebTester();
 		tester.setBaseUrl("http://localhost:8080/VR/");
+		
+		//clear database
+		String deleteAppointments = "DELETE FROM appointments";
+		String deleteParticipants = "DELETE FROM participants";
+		String deletePossibleDates = "DELETE FROM possibleDates";
+		
+		try (Connection connection = DriverManager
+				.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+
+			try (PreparedStatement psDeleteApts = connection.prepareStatement(deleteAppointments);
+					PreparedStatement psDeletePars = connection.prepareStatement(deleteParticipants);
+					PreparedStatement psDeletePDs = connection.prepareStatement(deletePossibleDates);) {
+				psDeleteApts.executeUpdate();
+				psDeletePars.executeUpdate();
+				psDeletePDs.executeUpdate();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	
 	@Test
 	public void testAddAppointment() {
 		
-		DBFacade stub = mock(DBFacade.class);
-		DBFacade.setInstance(stub);
-		
-		
-		
+//		DBFacade stub = mock(DBFacade.class);
+//		DBFacade.setInstance(stub);
 		tester.beginAt("add");
+//		Signing in
+		tester.setTextField("userid", "5");
+		tester.clickButton("signIn");
+		tester.gotoPage("add");
 		
 		//check all components of the input form
 		tester.assertFormPresent();
@@ -72,10 +99,43 @@ public class AddWebTest extends TestCase {
 		tester.clickButton("addAppointment");
 		
 		
-		int[] participants = {1,2,3};
-		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
-		verify(stub, times(1)).creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
+//		int[] participants = {1,2,3};
+//		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
+//		verify(stub, times(1)).creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
 
+	}
+	@Test
+	public void testReplyToAppointment() {
+		tester.beginAt("add");
+		
+		//insert one Appointment into DB
+		int[] participants = {5};
+		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
+		DBFacade.getInstance().creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
+		
+		//login and go to invitations
+		tester.setTextField("userid", "5");
+		tester.clickButton("signIn");
+		tester.gotoPage("reply");
+		
+		//confirm that the table is shown
+		tester.assertTextPresent("Name");
+		tester.assertTextPresent("Beschreibung");
+		tester.assertTextPresent("Ort");
+		tester.assertTextPresent("Dauer");
+		tester.assertTextPresent("Daten");
+		tester.assertTextPresent("Deadline");
+		
+		//confirm that the details of the appointment are shown
+		tester.assertTextPresent("testDescription");
+		tester.assertTextPresent("testName");
+		tester.assertTextPresent("testLocation");
+		tester.assertTextPresent("1");
+		
+		//click on the link to navigate to the reply page
+		
+		
+		
 	}
 
 }
