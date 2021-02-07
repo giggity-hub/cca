@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import application.CCApplication;
 import datatypes.Appointment;
 import datatypes.PossibleDate;
-import dbadapter.DBFacade;
 
 
 public class Reply extends HttpServlet {
@@ -67,7 +66,6 @@ public class Reply extends HttpServlet {
 			// Dispatch request to template engine
 			try {
 				int userId = SessionHelper.getUserId(request);
-				int groupId = 420;
 				ArrayList<Appointment> appointments = CCApplication.getInstance().getReplyedNotFinal(userId);
 				
 				// Set request attributes

@@ -4,19 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 //import java.util.Date;
 import java.util.Calendar;
 import java.sql.Date;
 
-import datatypes.AddressData;
 import datatypes.Appointment;
-import datatypes.GuestData;
 import datatypes.PossibleDate;
-import interfaces.IHolidayOffer;
 
 /**
  * Class which acts as the connector between application and database. Creates
