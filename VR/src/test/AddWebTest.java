@@ -133,9 +133,52 @@ public class AddWebTest extends TestCase {
 		tester.assertTextPresent("1");
 		
 		//click on the link to navigate to the reply page
+		tester.clickLinkWithExactText("testName");
 		
+		//confirm that the reply form is shown
+		tester.assertFormPresent();
+		tester.assertTextPresent("Possible Dates");
+		tester.assertTextPresent("Alternative Dates");
 		
+		//submit without selecting a date as possible
+		tester.clickButton("addPossibleDates");
+		tester.assertTextPresent("Es muss mindestens ein possible Date oder ein alternative Date angegeben werden");
 		
+		//go to the form again
+		tester.gotoPage("reply");
+		tester.clickLinkWithExactText("testName");
+		
+		//now select one date as possible and submit again
+		tester.checkCheckbox("pddate0");
+		tester.clickButton("addPossibleDates");
+		tester.assertTextPresent("Deine Reply wurde gespeichert");
+		
+	}
+	@Test
+	public void testShowCalendar() {
+		//insert one Appointment into DB
+		int[] participants = {5};
+		Date[] dates = {java.sql.Date.valueOf("2020-01-01")};
+		DBFacade.getInstance().creatingAppointment(69, dates, participants, "testDescription", "testName", "testLocation", 1, java.sql.Date.valueOf("2020-02-02"), 420);
+		
+		//login and go to calendar
+		tester.setTextField("userid", "5");
+		tester.clickButton("signIn");
+		tester.gotoPage("calendar");
+		
+		//confirm that the table is shown
+		tester.assertTextPresent("Name");
+		tester.assertTextPresent("Beschreibung");
+		tester.assertTextPresent("Ort");
+		tester.assertTextPresent("Dauer");
+		tester.assertTextPresent("Daten");
+		tester.assertTextPresent("Deadline");
+		
+		//confirm that the details of the appointment are shown
+		tester.assertTextPresent("testDescription");
+		tester.assertTextPresent("testName");
+		tester.assertTextPresent("testLocation");
+		tester.assertTextPresent("1");
 	}
 
 }
