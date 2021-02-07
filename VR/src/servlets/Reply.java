@@ -47,6 +47,11 @@ public class Reply extends HttpServlet {
 					}
 				}
 			}
+			else if(possibleDates != null) {
+				for (int i = 0; i < isMarked.length; i++) {
+					outDates.add(possibleDates.get(i).getDate().toString());
+				}
+			}
 			
 
 			try {
