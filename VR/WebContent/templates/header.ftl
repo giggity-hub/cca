@@ -52,11 +52,10 @@
 		}
   	</script>
 </head>
-<body class="d-flex flex-column">
-<div id="page-content"> 
+
  
  <nav class="navbar navbar-expand navbar-dark bg-dark px-3 mb-5">
-  <div class="collapse navbar-collapse" id="navbarNav">
+
   <#if navtype == "signedIn">
     <ul class="navbar-nav">
       <li class="nav-item active">
@@ -82,17 +81,21 @@
       <li class="nav-item">
         <a class="nav-link">Bitte gib mir eine User id:</a>
       </li>
-      <li class="nav-item">
-        <form method="POST" action="index?action=signin">
-          <input type="text" name="userid">
-          <button type="submit" id="signIn" name="singnIn" value="Submit">Ok</button>
+    </ul>
+      
+        <form method="POST" action="index?action=signin" class="d-flex" >
+      
+          <input type="text" name="userid" class="form-control me-2">
+          <button type="submit" id="signIn" name="singnIn" value="Submit" class="btn btn-outline-info">Ok</button>
+   
         </form>
-      </li>
-    </ul
+     
+
     </#if>>
-  </div>
+
 </nav>
- 
+<body class="d-flex flex-column">
+ <div id="page-content"> 
  
  
  
