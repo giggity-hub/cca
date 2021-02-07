@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import datatypes.Appointment;
+import datatypes.PossibleDate;
 import dbadapter.Configuration;
 import dbadapter.DBFacade;
 
@@ -27,6 +28,7 @@ public class DBFacadeTest {
 	int duration = 1;
 	Date deadline = Date.valueOf("2020-03-03");
 	int groupId = 420;
+	int replyer=2;
 
 
 	@Before
@@ -116,6 +118,44 @@ public class DBFacadeTest {
 				}
 				
 				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	public void testReplyingAppointmet() {
+		DBFacade.getInstance().creatingAppointment(creator, dates, participants, description, name, location, duration, deadline, groupId);
+		ArrayList<Appointment> apts = DBFacade.getInstance().getAppointmentsWithPossibleDates(replyer);
+		ArrayList<Date> pds=new ArrayList<>();
+		for(PossibleDate pd : apts.get(0).possibleDates){
+			pds.add(pd.getDate());
+		}
+		DBFacade.getInstance().replyingToAppointment(apts.get(0).aid, replyer, pds);
+		
+		String selectPossibleDates = "SELECT * FROM possibleDates WHERE mid="+replyer;
+		
+		try (Connection connection = DriverManager.getConnection(
+						"jdbc:" + Configuration.getType() + "://" + Configuration.getServer() + ":"
+								+ Configuration.getPort() + "/" + Configuration.getDatabase(),
+						Configuration.getUser(), Configuration.getPassword())) {
+
+			try (PreparedStatement psSelectPDs = connection.prepareStatement(selectPossibleDates)) {
+				
+				try (ResultSet rs = psSelectPDs.executeQuery()){
+					int length=0;
+					while (rs.next()) {
+						assertTrue(pds.contains(rs.getDate("date")));
+						assertEquals(replyer, rs.getInt("mid"));
+						assertEquals(apts.get(0).aid, rs.getInt("aid"));
+						
+						length++;
+					}
+					assertEquals(length, pds.size());
+					
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
