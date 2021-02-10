@@ -1,6 +1,5 @@
 package test;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,13 +7,6 @@ import dbadapter.Configuration;
 import dbadapter.DBFacade;
 import junit.framework.TestCase;
 import net.sourceforge.jwebunit.junit.WebTester;
-
-import org.junit.After;
-
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.sql.Connection;
 import java.sql.Date;
