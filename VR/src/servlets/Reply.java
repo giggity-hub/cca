@@ -83,7 +83,7 @@ public class Reply extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		if(!SessionHelper.validate(request,response)) return;
 		
 		if (request.getParameter("action").equals("postPossibleDates")) {
@@ -94,8 +94,6 @@ public class Reply extends HttpServlet {
 			
 			for (int i = 0; i < numofpd; i++) {
 				if (request.getParameter("pddate" + i) != null) {
-					/*String[] date = request.getParameter("pddate" + i).split("\\.");
-					pds.add(Date.valueOf(date[2] + "-" + date[1] + "-" + date[0]));*/
 					pds.add(Date.valueOf(request.getParameter("pddate" + i)));
 				}
 			}

@@ -87,9 +87,6 @@ public class DBFacade {
 	
 	public void creatingAppointment(int creator, Date[] dates, int[] participants, String description, String name,
 			String location, int duration, Date deadline, int groupId) {
-		// TODO Auto-generated method stub
-		System.out.println(creator);
-		
 		
 		String insertAppointment = "INSERT INTO appointments (groupId, description, name, location, duration, deadline, isFinal)VALUES (?, ?, ?, ?, ?, ?, false)";
 		
