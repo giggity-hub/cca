@@ -1,12 +1,5 @@
 package servlets;
 
-//Dies ist ein Kommentar von Stefan!!!
-// Hello there Stefan war hier jaja weiste bescheid, wa?
-//Alex auch
-//Lososcos
-// Lukas
-//ich bin der uwe und ich bin auch dabei
-//Alex ist wieder da
 import java.io.IOException;
 
 import java.sql.Date;
@@ -17,15 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import application.CCApplication;
-
-/**
- * 
- * @author swe.uni-due.de
- *
- *         This servlet only contains a small index webpage where the user is
- *         able to choose his role.
- */
-
 
 public class Add extends HttpServlet {
 

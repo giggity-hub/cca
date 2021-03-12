@@ -13,10 +13,7 @@ import application.CCApplication;
 public class Timer {
 
 	public static void main(String[] args) {
-//		VRApplication vrApp = new VRApplication();
-//		vrApp.checkPayment();
 		CCApplication ccaApp = new CCApplication();
 		ccaApp.checkDeadlines();
-//		System.out.println("All bookings not paid and older than 14 days are successfully deleted");
 	}
 }
